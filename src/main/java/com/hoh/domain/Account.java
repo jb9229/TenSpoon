@@ -6,6 +6,7 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Date;
 
 /**
  * Created by test on 2015-10-18.
@@ -19,6 +20,7 @@ public class Account {
     private Long id;
 
     private String loginId;
-
     private String password;
+    private Date joined;
+    private Date updated;
 }

@@ -4,6 +4,7 @@ import com.hoh.domain.Account;
 import com.hoh.dto.AccountDto;
 import com.hoh.repository.AccountRepository;
 import com.hoh.service.AccountService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class AccountController {
     private AccountService service;
 
     @Autowired
-    private AccountRepository repository;
+    private ModelMapper modelMapper;
 
 
     @RequestMapping(value="/accounts", method = RequestMethod.POST)
@@ -37,7 +38,8 @@ public class AccountController {
 
 
         Account newAccount  =   service.createAccount(create);
-        return new ResponseEntity<>(newAccount, HttpStatus.CREATED);
+
+        return new ResponseEntity<>(modelMapper.map(newAccount, AccountDto.Response.class), HttpStatus.CREATED);
     }
 
 

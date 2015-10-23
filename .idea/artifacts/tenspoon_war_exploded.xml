@@ -40,8 +40,6 @@
           <element id="library" level="project" name="Maven: com.google.appengine.orm:datanucleus-appengine:2.1.2" />
           <element id="library" level="project" name="Maven: javax.jdo:jdo-api:3.0.1" />
           <element id="library" level="project" name="Maven: javax.transaction:jta:1.1" />
-          <element id="library" level="project" name="Maven: junit:junit:4.12" />
-          <element id="library" level="project" name="Maven: org.hamcrest:hamcrest-core:1.3" />
         </element>
       </element>
       <element id="directory" name="META-INF">

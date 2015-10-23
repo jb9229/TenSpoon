@@ -17,6 +17,8 @@
 
        <bean class="org.modelmapper.ModelMapper"/>
 
+       <bean class="com.fasterxml.jackson.databind.ObjectMapper" />
+
        <bean class="org.springframework.orm.jpa.JpaTransactionManager" id="transactionManager">
               <constructor-arg ref="entityManagerFactory" />
        </bean>
