@@ -1,5 +1,6 @@
 package com.hoh.controller;
 
+import com.hoh.common.ErrorResponse;
 import com.hoh.domain.Account;
 import com.hoh.dto.AccountDto;
 import com.hoh.repository.AccountRepository;
@@ -32,8 +33,11 @@ public class AccountController {
     public ResponseEntity createAccount(@RequestBody @Valid AccountDto.Create create, BindingResult result){
 
         if(result.hasErrors()){
-            //TODO 에러응답 본문 추가
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            ErrorResponse errorResponse =   new ErrorResponse();
+
+            errorResponse.setMessage(result.toString());
+            errorResponse.setCode("bed.request");
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
 
 

@@ -1,11 +1,13 @@
 package com.hoh.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hoh.Application;
 import com.hoh.dto.AccountDto;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -23,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Created by jeong on 2015-10-20.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration({"/WEB-INF/dispatcherServlet-servlet.xml", "/WEB-INF/applicationContext.xml"})
+@SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 public class AccountControllerTest {
 
@@ -43,8 +45,8 @@ public class AccountControllerTest {
         MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
 
         AccountDto.Create createDto =   new AccountDto.Create();
-        createDto.setUsername("진범");
-        createDto.setPassword("123");
+        createDto.setUsername("jinbeomjeong");
+        createDto.setPassword("123456");
 
         ResultActions result = mockMvc.perform(post("/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
