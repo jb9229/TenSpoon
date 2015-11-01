@@ -2,6 +2,8 @@ package com.hoh.common;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * Created by test on 2015-10-29.
  */
@@ -10,4 +12,10 @@ public class ErrorResponse {
 
     private String message;
     private String code;
+
+    private List<FieldError> errors;
+
+    public static class FieldError{
+
+    }
 }

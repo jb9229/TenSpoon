@@ -1,4 +1,4 @@
-package com.hoh.dto;
+package com.hoh.accounts;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;

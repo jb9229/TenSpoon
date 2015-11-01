@@ -1,11 +1,9 @@
-package com.hoh.domain;
+package com.hoh.accounts;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -19,8 +17,16 @@ public class Account {
     @Id @GeneratedValue
     private Long id;
 
-    private String loginId;
+    @Column(unique = true)
+    private String username;
+
     private String password;
+
+    private String email;
+
+    @Temporal(TemporalType.TIMESTAMP)
     private Date joined;
+
+    @Temporal(TemporalType.TIMESTAMP)
     private Date updated;
 }
