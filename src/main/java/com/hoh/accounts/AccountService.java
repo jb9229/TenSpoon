@@ -41,4 +41,19 @@ public class AccountService {
 
         return repository.save(account);
     }
+
+    public Account getAccount(Long id) {
+        Account account     =   repository.findOne(id);
+
+        if(account == null)
+        {
+            throw new AccountNotFoundException(id);
+        }
+
+        return account;
+    }
+
+//    public Account updateAccount(Long id, AccountDto.Update updateDto){
+//
+//    }
 }

@@ -11,9 +11,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServlet;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /**
  * Created by test on 2015-10-18.
@@ -46,7 +49,7 @@ public class AccountController {
         return new ResponseEntity<>(modelMapper.map(newAccount, AccountDto.Response.class), HttpStatus.CREATED);
     }
 
-    @RequestMapping(value="/accounts", method = RequestMethod.GET)
+    @RequestMapping(value="/accounts", method = GET)
     public ResponseEntity getAccounts(Pageable pageable){
         Page<Account> page  =      repository.findAll(pageable);
 
@@ -59,14 +62,33 @@ public class AccountController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @RequestMapping(value="/accounts/{id}", method = GET )
+    public ResponseEntity getAccount(@PathVariable Long id) {
+        Account account                     =   service.getAccount(id);
+
+        AccountDto.Response response        =   modelMapper.map(account, AccountDto.Response.class);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @ExceptionHandler(UserDuplicatedException.class)
-    public ResponseEntity handlerUserDuplicatedException(UserDuplicatedException e){
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handlerUserDuplicatedException(UserDuplicatedException e){
         ErrorResponse   errorResponse   =   new ErrorResponse();
         errorResponse.setMessage("["+ e.getUsername() + "] 중복된 username 입니다.");
         errorResponse.setCode("duplicated.username.exception");
 
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        return errorResponse;
     }
 
+    @ExceptionHandler(AccountNotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handlerAccountNotFoundException(AccountNotFoundException e){
+        ErrorResponse errorResponse  =   new ErrorResponse();
+        errorResponse.setMessage("["+ e.getId()+"]에 해당하는 계정이 없습니다.");
+        errorResponse.setCode("account.not.found.exception");
+
+        return errorResponse;
+    }
 
 }
