@@ -29,6 +29,7 @@ public class AccountDto {
     public static class Response{
         private Long id;
         private String username;
+        private String fullName;
         private Date joined;
         private Date updated;
     }

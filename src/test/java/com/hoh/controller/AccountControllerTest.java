@@ -19,8 +19,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -134,6 +133,46 @@ public class AccountControllerTest {
 
         result.andDo(print());
         result.andExpect(status().isOk());
+    }
+
+    @Test
+    public void updateAccount() throws Exception {
+        AccountDto.Create   createDto   =   accountCreateFixture();
+        Account account                 =   service.createAccount(createDto);
+
+        AccountDto.Update   updateDto   =   new AccountDto.Update();
+        updateDto.setPassword("changePassword");
+        updateDto.setFullName("CHANGED_FULL_NAME");
+
+        ResultActions resultActions     =   mockMvc.perform(put("/accounts/"+account.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateDto)));
+
+        resultActions.andDo(print());
+        resultActions.andExpect(status().isOk());
+        resultActions.andExpect(jsonPath("$.fullName", is("CHANGED_FULL_NAME")));
+    }
+
+    @Test
+    public void deleteAccount() throws Exception {
+        AccountDto.Create   createDto   =   accountCreateFixture();
+        Account account                 =   service.createAccount(createDto);
+
+
+        ResultActions resultActions     =   mockMvc.perform(delete("/accounts/"+account.getId()));
+
+
+        resultActions.andDo(print());
+        resultActions.andExpect(status().isNoContent());
+    }
+
+
+    @Test
+    public void deleteAccount_BedRequest() throws Exception {
+        ResultActions resultActions     =   mockMvc.perform(delete("/accounts/1"));
+
+        resultActions.andDo(print());
+        resultActions.andExpect(status().isBadRequest());
     }
 
 

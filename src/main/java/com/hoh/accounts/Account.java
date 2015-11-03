@@ -24,6 +24,8 @@ public class Account {
 
     private String email;
 
+    private String fullName;
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date joined;
 

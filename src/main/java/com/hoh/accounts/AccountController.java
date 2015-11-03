@@ -16,7 +16,9 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 /**
  * Created by test on 2015-10-18.
@@ -70,6 +72,36 @@ public class AccountController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @RequestMapping(value="/accounts/{id}", method = PUT)
+    public ResponseEntity updateAccount(@PathVariable Long id,
+                                        @RequestBody @Valid AccountDto.Update updateDto,
+                                        BindingResult result){
+
+        if(result.hasErrors()){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        Account account     =   repository.findOne(id);
+
+        if(account  ==  null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        Account updateAccount     =   service.updateAccount(account, updateDto);
+
+        return new ResponseEntity<>(modelMapper.map(updateAccount, AccountDto.Response.class),
+                HttpStatus.OK);
+    }
+
+
+    @RequestMapping(value="/accounts/{id}", method = DELETE)
+    public ResponseEntity deleteAccount(@PathVariable Long id){
+        service.deleteAccount(id);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 
     @ExceptionHandler(UserDuplicatedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

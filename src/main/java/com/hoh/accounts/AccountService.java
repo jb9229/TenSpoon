@@ -53,7 +53,15 @@ public class AccountService {
         return account;
     }
 
-//    public Account updateAccount(Long id, AccountDto.Update updateDto){
-//
-//    }
+    public Account updateAccount(Account account, AccountDto.Update updateDto) {
+        account.setPassword(updateDto.getPassword());
+        account.setFullName(updateDto.getFullName());
+
+        return repository.save(account);
+    }
+
+    public void deleteAccount(Long id){
+        repository.delete(getAccount(id));
+    }
+
 }
