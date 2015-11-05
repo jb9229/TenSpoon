@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
+import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -19,6 +20,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -41,11 +43,16 @@ public class AccountControllerTest {
     AccountService service;
 
     @Autowired
+    private FilterChainProxy filterChainProxy;
+
+    @Autowired
     ObjectMapper objectMapper;
 
     @Before
     public void setUp() throws Exception {
-        mockMvc = MockMvcBuilders.webAppContextSetup(wac).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(wac)
+                .addFilter(filterChainProxy)
+                .build();
     }
 
 
@@ -159,7 +166,8 @@ public class AccountControllerTest {
         Account account                 =   service.createAccount(createDto);
 
 
-        ResultActions resultActions     =   mockMvc.perform(delete("/accounts/"+account.getId()));
+        ResultActions resultActions     =   mockMvc.perform(delete("/accounts/"+account.getId())
+        .with(httpBasic(createDto.getUsername(), createDto.getPassword())));
 
 
         resultActions.andDo(print());

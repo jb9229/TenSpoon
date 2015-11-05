@@ -10,6 +10,8 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <spring.version>4.2.1.RELEASE</spring.version>
+        <spring-security.version>4.0.2.RELEASE</spring-security.version>
     </properties>
 
     <parent>
@@ -19,6 +21,7 @@
     </parent>
 
     <dependencies>
+        <!--Spring Boot Dependency-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -40,6 +43,33 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+
+
+        <!--Client Library Dependency-->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>react</artifactId>
+            <version>0.13.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>3.3.5</version>
+        </dependency>
+
+
+        <!--Util Dependency-->
+        <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
         </dependency>
@@ -60,17 +90,7 @@
             <artifactId>json-path</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>react</artifactId>
-            <version>0.13.3</version>
-        </dependency>
 
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>bootstrap</artifactId>
-            <version>3.3.5</version>
-        </dependency>
 
     </dependencies>
 

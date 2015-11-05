@@ -7,6 +7,7 @@ import com.hoh.accounts.AccountRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,9 @@ public class AccountService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public Account createAccount(AccountDto.Create dto){
         Account account =   modelMapper.map(dto, Account.class);
 
@@ -34,7 +38,8 @@ public class AccountService {
             throw new UserDuplicatedException(username);
         }
 
-        //TODO password 해싱
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
+
         Date date   =   new Date();
         account.setJoined(date);
         account.setUpdated(date);
@@ -54,7 +59,7 @@ public class AccountService {
     }
 
     public Account updateAccount(Account account, AccountDto.Update updateDto) {
-        account.setPassword(updateDto.getPassword());
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
         account.setFullName(updateDto.getFullName());
 
         return repository.save(account);
