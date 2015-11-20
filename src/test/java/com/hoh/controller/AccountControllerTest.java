@@ -125,6 +125,7 @@ public class AccountControllerTest {
     private AccountDto.Create accountCreateFixture(){
         AccountDto.Create createDto =   new AccountDto.Create();
         createDto.setUsername("jinbeomjeong");
+        createDto.setEmail("jinbeomjeong@google.com");
         createDto.setPassword("123456");
 
         return createDto;
@@ -136,7 +137,8 @@ public class AccountControllerTest {
 
         Account account                 =   service.createAccount(createDto);
 
-        ResultActions result            =   mockMvc.perform(get("/accounts/"+account.getId()));
+        ResultActions result            =   mockMvc.perform(get("/accounts/"+account.getId())
+                .with(httpBasic(createDto.getEmail(), createDto.getPassword())));
 
         result.andDo(print());
         result.andExpect(status().isOk());
@@ -166,8 +168,8 @@ public class AccountControllerTest {
         Account account                 =   service.createAccount(createDto);
 
 
-        ResultActions resultActions     =   mockMvc.perform(delete("/accounts/"+account.getId())
-        .with(httpBasic(createDto.getUsername(), createDto.getPassword())));
+        ResultActions resultActions     =   mockMvc.perform(delete("/accounts/" + account.getId())
+        .with(httpBasic(createDto.getEmail(), createDto.getPassword())));
 
 
         resultActions.andDo(print());
@@ -181,6 +183,22 @@ public class AccountControllerTest {
 
         resultActions.andDo(print());
         resultActions.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void loginAccount() throws Exception {
+        AccountDto.Create   createDto   =   accountCreateFixture();
+        Account account                 =   service.createAccount(createDto);
+
+        ResultActions resultActions     =   mockMvc.perform(post("/auth/login")
+//                .with(httpBasic(createDto.getEmail(), createDto.getPassword())));
+                .contentType(MediaType.APPLICATION_JSON)
+//                .content(objectMapper.writeValueAsString(createDto)));
+                .content("email:"+createDto.getEmail()+",password:"+createDto.getPassword()));
+
+        resultActions.andDo(print());
+        resultActions.andExpect(status().isOk());
+
     }
 
 

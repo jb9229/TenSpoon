@@ -1,6 +1,7 @@
 package com.hoh.accounts;
 
 import lombok.Data;
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Size;
@@ -16,13 +17,27 @@ public class AccountDto {
     public static class Create{
 
         @NotBlank
-        @Size(min=5)
-        private String username;
+        @Size(min=5, max=100)
+        @Email
+        private String email;
 
 
         @NotBlank
-        @Size(min=5)
+        @Size(min=5, max = 45)
         private String password;
+
+        @NotBlank
+        @Size(max = 45)
+        private String username;
+
+
+        private boolean gender;
+
+        private boolean single;
+
+        private boolean birth;
+
+        private String residence;
     }
 
     @Data

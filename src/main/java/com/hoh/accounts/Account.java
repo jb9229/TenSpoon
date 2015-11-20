@@ -18,13 +18,19 @@ public class Account {
     private Long id;
 
     @Column(unique = true)
-    private String username;
+    private String email;
 
     private String password;
 
-    private String email;
+    private String username;
 
-    private String fullName;
+    private boolean gender;
+
+    private boolean single;
+
+    private boolean birth;
+
+    private String residence;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date joined;

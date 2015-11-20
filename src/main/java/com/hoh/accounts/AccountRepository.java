@@ -1,6 +1,5 @@
 package com.hoh.accounts;
 
-import com.hoh.accounts.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -8,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface AccountRepository extends JpaRepository<Account, Long>{
     Account findByUsername(String username);
+
+    Account findByEmail(String email);
 }

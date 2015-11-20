@@ -1,9 +1,5 @@
 package com.hoh.accounts;
 
-import com.hoh.accounts.UserDuplicatedException;
-import com.hoh.accounts.Account;
-import com.hoh.accounts.AccountDto;
-import com.hoh.accounts.AccountRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +56,6 @@ public class AccountService {
 
     public Account updateAccount(Account account, AccountDto.Update updateDto) {
         account.setPassword(passwordEncoder.encode(account.getPassword()));
-        account.setFullName(updateDto.getFullName());
 
         return repository.save(account);
     }

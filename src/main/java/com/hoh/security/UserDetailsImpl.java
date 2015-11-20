@@ -15,7 +15,7 @@ import java.util.List;
 public class UserDetailsImpl extends User {
 
     public UserDetailsImpl(Account account) {
-        super(account.getUsername(), account.getPassword(), authorities(account));
+        super(account.getEmail(), account.getPassword(), authorities(account));
     }
 
     private static Collection<? extends GrantedAuthority> authorities(Account account) {
