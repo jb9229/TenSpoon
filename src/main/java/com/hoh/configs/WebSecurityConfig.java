@@ -2,6 +2,7 @@ package com.hoh.configs;
 
 import com.hoh.security.RestLoginFailureHandler;
 import com.hoh.security.RestLoginSuccessHandler;
+import com.hoh.security.RestLogoutSuccessHandler;
 import com.hoh.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -29,6 +30,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private RestLoginSuccessHandler loginSuccessHandler;
 
+    @Autowired
+    private RestLogoutSuccessHandler logoutSuccessHandler;
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -55,7 +59,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(loginSuccessHandler)
                 .and()
             .logout()
-                .logoutUrl("/auth/logout");
+                .logoutUrl("/auth/logout")
+                .logoutSuccessHandler(logoutSuccessHandler);
 
     }
 

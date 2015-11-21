@@ -190,15 +190,24 @@ public class AccountControllerTest {
         AccountDto.Create   createDto   =   accountCreateFixture();
         Account account                 =   service.createAccount(createDto);
 
-        ResultActions resultActions     =   mockMvc.perform(post("/auth/login")
-//                .with(httpBasic(createDto.getEmail(), createDto.getPassword())));
+        ResultActions resultActions     =   mockMvc.perform(post("/auth/login").param("email", "jinbeomjeong@google.com").param("password", "123456")
                 .contentType(MediaType.APPLICATION_JSON)
-//                .content(objectMapper.writeValueAsString(createDto)));
-                .content("email:"+createDto.getEmail()+",password:"+createDto.getPassword()));
+                .content(objectMapper.writeValueAsString(createDto)));
 
         resultActions.andDo(print());
         resultActions.andExpect(status().isOk());
+    }
 
+
+    @Test
+    public void logoutAccount() throws Exception {
+        AccountDto.Create   createDto   =   accountCreateFixture();
+        Account account                 =   service.createAccount(createDto);
+
+        ResultActions resultActions     =   mockMvc.perform(get("/auth/logout"));
+
+        resultActions.andDo(print());
+        resultActions.andExpect(status().isOk());
     }
 
 

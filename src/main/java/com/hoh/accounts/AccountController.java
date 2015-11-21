@@ -100,11 +100,6 @@ public class AccountController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @RequestMapping(value = "/auth/login", method = POST)
-    public void login(){
-        System.out.println("controller > /auth/login");
-    }
-
 
     @ExceptionHandler(UserDuplicatedException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
