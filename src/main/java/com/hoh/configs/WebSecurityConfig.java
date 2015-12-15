@@ -52,12 +52,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
 
-//        http.httpBasic();
+        http.httpBasic();
 
         http.authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/accounts/**").hasRole("USER")
                 .antMatchers(HttpMethod.PUT, "/accounts/**").hasRole("USER")
                 .antMatchers(HttpMethod.DELETE, "/accounts/**").hasRole("USER")
+                .antMatchers(HttpMethod.GET, "/accounts/").permitAll()
                 .anyRequest().permitAll()
                 .and()
             .formLogin()

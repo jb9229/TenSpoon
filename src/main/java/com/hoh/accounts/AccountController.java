@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServlet;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,6 +30,7 @@ public class AccountController {
 
     @Autowired
     private ModelMapper modelMapper;
+
 
 
     @RequestMapping(value="/accounts", method = RequestMethod.POST)
@@ -53,7 +53,8 @@ public class AccountController {
     public ResponseEntity getAccounts(Pageable pageable){
         Page<Account> page  =      repository.findAll(pageable);
 
-        //TODO stream() vs parallelStream()
+
+        //TODO limit & email 조건
         List<AccountDto.Response> content = page.getContent().parallelStream()
                 .map(account -> modelMapper.map(account, AccountDto.Response.class))
                 .collect(Collectors.toList());
@@ -61,6 +62,7 @@ public class AccountController {
         PageImpl<AccountDto.Response> result    =   new PageImpl<>(content, pageable, page.getTotalElements());
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
+
 
     @RequestMapping(value="/accounts/{id}", method = GET )
     public ResponseEntity getAccount(@PathVariable Long id) {

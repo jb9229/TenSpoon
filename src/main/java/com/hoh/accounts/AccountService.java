@@ -54,8 +54,10 @@ public class AccountService {
         return account;
     }
 
+
     public Account updateAccount(Account account, AccountDto.Update updateDto) {
         account.setPassword(passwordEncoder.encode(account.getPassword()));
+        account.setUsername(updateDto.getUsername());
 
         return repository.save(account);
     }

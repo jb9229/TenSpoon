@@ -102,9 +102,7 @@ public class AccountControllerTest {
     @Test
     public void createAccout_DuplicatedRequest() throws Exception {
 
-        AccountDto.Create createDto =   new AccountDto.Create();
-        createDto.setUsername("jinbeomjeong");
-        createDto.setPassword("123456");
+        AccountDto.Create createDto =  accountCreateFixture();
 
         ResultActions result = mockMvc.perform(post("/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -117,8 +115,21 @@ public class AccountControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createDto)));
 
+
         result.andDo(print());
         result.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void checkAccout() throws Exception {
+
+        AccountDto.Create createDto =  accountCreateFixture();
+
+        ResultActions result = mockMvc.perform(get("/accounts/"+createDto.getEmail()));
+
+        result.andDo(print());
+        result.andExpect(status().isCreated());
+
     }
 
 
@@ -160,14 +171,17 @@ public class AccountControllerTest {
         updateDto.setPassword("changePassword");
         updateDto.setUsername("Jeong Jinbeom");
 
-        ResultActions resultActions     =   mockMvc.perform(put("/accounts/"+account.getId())
+        ResultActions resultActions     =   mockMvc.perform(put("/accounts/" + account.getId())
+                .with(httpBasic(createDto.getEmail(), createDto.getPassword()))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updateDto)));
 
         resultActions.andDo(print());
         resultActions.andExpect(status().isOk());
-        resultActions.andExpect(jsonPath("$.fullName", is("CHANGED_FULL_NAME")));
+        resultActions.andExpect(jsonPath("$.username", is("Jeong Jinbeom")));
     }
+
+
 
     @Test
     public void deleteAccount() throws Exception {
