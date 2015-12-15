@@ -18,9 +18,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-@Configuration
-@EnableWebSecurity
-@Order(2)
+//@Configuration
+//@EnableWebSecurity
+//@Order(2)
 public class APISecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Autowired

@@ -10,6 +10,9 @@ import java.util.Collection;
  * Created by jeong on 2015-11-24.
  */
 public class UserContext implements UserDetails {
+    String username;
+    String password;
+    Long id;
 
     private Account user;
 

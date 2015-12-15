@@ -59,7 +59,7 @@ public class TokenBasedAuthenticationFilter extends AbstractAuthenticationProces
         AbstractAuthenticationToken authToken   =   null;
 
         try{
-            String[] tokens =   authTokenGeneratorService.decode(token);
+            String[] tokens         =   authTokenGeneratorService.decode(token);
 
             AuthToken tokenEntry    =   authTokenService.findUserByTokenAndServices(tokens[0], tokens[2]);
 
@@ -68,6 +68,8 @@ public class TokenBasedAuthenticationFilter extends AbstractAuthenticationProces
             }
 
             UserContext securityUser    =   new UserContext(tokenEntry.getUser());
-        }
+        }catch (Exception e){}
+
+        return null;
     }
 }

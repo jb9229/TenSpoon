@@ -24,11 +24,11 @@ public class Account {
 
     private String username;
 
-    private boolean gender;
+    private boolean female;
 
     private boolean single;
 
-    private boolean birth;
+    private int birth;
 
     private String residence;
 

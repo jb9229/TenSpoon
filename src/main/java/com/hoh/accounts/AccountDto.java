@@ -21,7 +21,6 @@ public class AccountDto {
         @Email
         private String email;
 
-
         @NotBlank
         @Size(min=5, max = 45)
         private String password;
@@ -30,12 +29,11 @@ public class AccountDto {
         @Size(max = 45)
         private String username;
 
-
-        private boolean gender;
+        private boolean female;
 
         private boolean single;
 
-        private boolean birth;
+        private int birth;
 
         private String residence;
     }
@@ -45,7 +43,9 @@ public class AccountDto {
         private Long id;
         private String email;
         private String username;
-        private String fullName;
+        private boolean female;
+        private boolean single;
+        private int birth;
         private Date joined;
         private Date updated;
     }
@@ -53,6 +53,6 @@ public class AccountDto {
     @Data
     public static class Update {
         private String password;
-        private String fullName;
+        private String username;
     }
 }

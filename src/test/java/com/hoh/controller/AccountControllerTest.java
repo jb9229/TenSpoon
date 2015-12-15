@@ -55,13 +55,25 @@ public class AccountControllerTest {
                 .build();
     }
 
+    private AccountDto.Create accountCreateFixture(){
+        AccountDto.Create createDto =   new AccountDto.Create();
+        createDto.setUsername("Jinbeom");
+        createDto.setEmail("jinbeomjeong@google.com");
+        createDto.setPassword("123456");
+        createDto.setFemale(false);
+        createDto.setSingle(true);
+        createDto.setBirth(1983);
+        createDto.setResidence("충청북도 영동군");
+
+
+        return createDto;
+    }
 
     @Test
     public void createAccount() throws Exception {
 
-        AccountDto.Create createDto =   new AccountDto.Create();
-        createDto.setUsername("jinbeomjeong");
-        createDto.setPassword("123456");
+        AccountDto.Create createDto =   accountCreateFixture();
+
 
         ResultActions result = mockMvc.perform(post("/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -109,6 +121,8 @@ public class AccountControllerTest {
         result.andExpect(status().isBadRequest());
     }
 
+
+
     @Test
     public void getAccounts() throws Exception {
         AccountDto.Create create    =   new AccountDto.Create();
@@ -120,15 +134,6 @@ public class AccountControllerTest {
 
         result.andDo(print());
         result.andExpect(status().isOk());
-    }
-
-    private AccountDto.Create accountCreateFixture(){
-        AccountDto.Create createDto =   new AccountDto.Create();
-        createDto.setUsername("jinbeomjeong");
-        createDto.setEmail("jinbeomjeong@google.com");
-        createDto.setPassword("123456");
-
-        return createDto;
     }
 
     @Test
@@ -144,6 +149,8 @@ public class AccountControllerTest {
         result.andExpect(status().isOk());
     }
 
+
+
     @Test
     public void updateAccount() throws Exception {
         AccountDto.Create   createDto   =   accountCreateFixture();
@@ -151,7 +158,7 @@ public class AccountControllerTest {
 
         AccountDto.Update   updateDto   =   new AccountDto.Update();
         updateDto.setPassword("changePassword");
-        updateDto.setFullName("CHANGED_FULL_NAME");
+        updateDto.setUsername("Jeong Jinbeom");
 
         ResultActions resultActions     =   mockMvc.perform(put("/accounts/"+account.getId())
                 .contentType(MediaType.APPLICATION_JSON)
@@ -181,6 +188,7 @@ public class AccountControllerTest {
     public void deleteAccount_BedRequest() throws Exception {
         ResultActions resultActions     =   mockMvc.perform(delete("/accounts/1"));
 
+
         resultActions.andDo(print());
         resultActions.andExpect(status().isBadRequest());
     }
@@ -190,9 +198,8 @@ public class AccountControllerTest {
         AccountDto.Create   createDto   =   accountCreateFixture();
         Account account                 =   service.createAccount(createDto);
 
-        ResultActions resultActions     =   mockMvc.perform(post("/auth/login").param("email", "jinbeomjeong@google.com").param("password", "123456")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(createDto)));
+
+        ResultActions resultActions     =   mockMvc.perform(post("/auth/login").param("email", "jinbeomjeong@google.com").param("password", "123456"));
 
         resultActions.andDo(print());
         resultActions.andExpect(status().isOk());
