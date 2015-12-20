@@ -32,6 +32,8 @@ public class Account {
 
     private String residence;
 
+    private Double authMailKey;
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date joined;
 

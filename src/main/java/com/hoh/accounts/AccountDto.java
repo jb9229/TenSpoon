@@ -36,6 +36,8 @@ public class AccountDto {
         private int birth;
 
         private String residence;
+
+        private Double authMailKey;
     }
 
     @Data
@@ -48,6 +50,7 @@ public class AccountDto {
         private int birth;
         private Date joined;
         private Date updated;
+        private Double authMailKey;
     }
 
     @Data

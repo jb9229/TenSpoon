@@ -55,6 +55,8 @@ public class AccountControllerTest {
                 .build();
     }
 
+
+
     private AccountDto.Create accountCreateFixture(){
         AccountDto.Create createDto =   new AccountDto.Create();
         createDto.setUsername("Jinbeom");
@@ -69,6 +71,8 @@ public class AccountControllerTest {
         return createDto;
     }
 
+
+
     @Test
     public void createAccount() throws Exception {
 
@@ -78,7 +82,7 @@ public class AccountControllerTest {
         ResultActions result = mockMvc.perform(post("/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createDto)));
-        result.andExpect(jsonPath("$.username", is("jinbeomjeong")));
+        result.andExpect(jsonPath("$.username", is("Jinbeom")));
 
         result.andDo(print());
         result.andExpect(status().isCreated());
@@ -197,7 +201,6 @@ public class AccountControllerTest {
         resultActions.andExpect(status().isNoContent());
     }
 
-
     @Test
     public void deleteAccount_BedRequest() throws Exception {
         ResultActions resultActions     =   mockMvc.perform(delete("/accounts/1"));
@@ -206,6 +209,8 @@ public class AccountControllerTest {
         resultActions.andDo(print());
         resultActions.andExpect(status().isBadRequest());
     }
+
+
 
     @Test
     public void loginAccount() throws Exception {
@@ -218,7 +223,6 @@ public class AccountControllerTest {
         resultActions.andDo(print());
         resultActions.andExpect(status().isOk());
     }
-
 
     @Test
     public void logoutAccount() throws Exception {
