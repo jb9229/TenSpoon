@@ -136,12 +136,12 @@ public class AccountControllerTest {
 
     @Test
     public void getAccounts() throws Exception {
-        AccountDto.Create create    =   new AccountDto.Create();
+        AccountDto.Create createDto =  accountCreateFixture();
 
-        create.setUsername("jinbeomjeong");
-        create.setPassword("123456");
+        Account account                 =   service.createAccount(createDto);
 
-        ResultActions result    =   mockMvc.perform(get("/accounts"));
+        ResultActions result    =   mockMvc.perform(get("/accounts?email=jinbeomjeong@google.com&size=2")
+                .with(httpBasic(createDto.getEmail(), createDto.getPassword())));
 
         result.andDo(print());
         result.andExpect(status().isOk());

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -50,13 +52,18 @@ public class AccountController {
     }
 
     @RequestMapping(value="/accounts", method = GET)
-    public ResponseEntity getAccounts(Pageable pageable){
-        Page<Account> page  =      repository.findAll(pageable);
+    public ResponseEntity getAccounts(Account account, Pageable pageable){
+
+        Specification<Account> spec     =   Specifications.where(AccountSpecs.emailEqual(account.getEmail()));//spec  =   spec.and()
+
+
+
+        Page<Account> page              =      repository.findAll(spec, pageable);
 
 
         //TODO limit & email 조건
         List<AccountDto.Response> content = page.getContent().parallelStream()
-                .map(account -> modelMapper.map(account, AccountDto.Response.class))
+                .map(newAccount -> modelMapper.map(newAccount, AccountDto.Response.class))
                 .collect(Collectors.toList());
 
         PageImpl<AccountDto.Response> result    =   new PageImpl<>(content, pageable, page.getTotalElements());
