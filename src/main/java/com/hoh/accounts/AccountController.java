@@ -1,5 +1,7 @@
 package com.hoh.accounts;
 
+import com.hoh.common.Email;
+import com.hoh.common.EmailSender;
 import com.hoh.common.ErrorResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,10 @@ public class AccountController {
     private ModelMapper modelMapper;
 
 
+    @Autowired
+    private EmailSender emailSender;
+
+
 
     @RequestMapping(value="/accounts", method = RequestMethod.POST)
     public ResponseEntity createAccount(@RequestBody @Valid AccountDto.Create create, BindingResult result){
@@ -46,9 +52,36 @@ public class AccountController {
             return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
         }
 
+        double authMailKey  =   Math.random();
+        create.setAuthMailKey(authMailKey);
+
         Account newAccount  =   service.createAccount(create);
 
+
+
+        Email authenMail    =   new Email();
+        authenMail.setSubject("가입을 축하 드립니다, 이메일 인증을 해 주세요.");
+        authenMail.setReceiver(newAccount.getEmail());
+        authenMail.setContent("<p> 십시일반 가입을 축하 드립니다, 하기 링크로 이메일 인증을 완료 해 주세요.</p> <a href='http://localhost:8080/accounts/auth/" + newAccount.getEmail() + "/" + authMailKey + "'>이메일 인증하러 가기</a>");
+
+        emailSender.sendMail(authenMail);
+
+
         return new ResponseEntity<>(modelMapper.map(newAccount, AccountDto.Response.class), HttpStatus.CREATED);
+    }
+
+
+    @RequestMapping(value = "/accounts/auth/{email}/{key}", method = RequestMethod.GET)
+    public ResponseEntity authAccountMail(@PathVariable String email, @PathVariable Double key){
+        Account account         =   repository.findByEmail(email);
+
+        account.setAuthMailKey(null);
+
+        Account updateAccount   =   repository.save(account);
+
+        return new ResponseEntity<>(modelMapper.map(updateAccount, AccountDto.Response.class),
+                HttpStatus.OK);
+
     }
 
     @RequestMapping(value="/accounts", method = GET)
