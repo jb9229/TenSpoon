@@ -99,6 +99,7 @@ public class AccountController {
                 .map(newAccount -> modelMapper.map(newAccount, AccountDto.Response.class))
                 .collect(Collectors.toList());
 
+
         PageImpl<AccountDto.Response> result    =   new PageImpl<>(content, pageable, page.getTotalElements());
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

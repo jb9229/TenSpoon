@@ -10,8 +10,75 @@
     <script src="/webjars/react/0.13.3/JSXTransformer.js"></script>
 </head>
 <body>
-    Spring boot page
+    <!--<script type="text/jsx" src="main.js"></script>-->
+    <div id="content"></div>
 
-    <script type="text/jsx" src="main.js"></script>
+    <script type="text/jsx">
+        var AccountBox  =   React.createClass({
+           loadAccountsFromServer: function() {
+               $.ajax({
+                   url: this.props.url,
+                   dataType: 'json',
+                   cache: false,
+                   success: function(data) {
+                       this.setState({data: data});
+                   }.bind(this),
+                   error: function(xhr, status, err){
+                       console.error(this.props.url, status, err.toString());
+                   }.bind(this)
+               });
+           },
+            getInitialState: function() {
+                return {data: []};
+            },
+            componentDidMount: function() {
+                this.loadAccountsFromServer();
+                setInterval(this.loadAccountsFromServer, this.props.pollInterval);
+            },
+            render: function() {
+                return (
+                        <div className="accountBox">
+                            <h1>사용자</h1>
+                            <AccountList data={this.state.data} />
+                            <AccountForm />
+                        </div>
+                );
+            }
+        });
+
+        var AccountList =   React.createClass({
+            render: function() {
+                var accountNodes = this.props.data.map(function (account) {
+                    return (
+                            <Account email={account.email}>
+                                {account.username}
+                            </Account>
+                    );
+                });
+                return (
+                        <div className="accountList">
+                            {accountNodes}
+                        </div>
+                );
+            }
+        });
+
+        var Account     =   React.createClass({
+            render: function() {
+                return (
+                        <div className="account">
+                            <h2 className="accountEmail">
+                                {this.props.email}
+                            </h2>
+                        </div>
+                );
+            }
+        });
+
+        React.render(
+                <AccountBox url="/accounts?email=jinbeomjeong@google.com&size=2" pollInterval={2000} />,
+                document.getElementById('content')
+        );
+    </script>
 </body>
 </html>
