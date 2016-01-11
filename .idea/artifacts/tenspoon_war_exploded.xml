@@ -84,6 +84,7 @@
           <element id="library" level="project" name="Maven: org.webjars:react:0.13.3" />
           <element id="library" level="project" name="Maven: org.webjars:bootstrap:3.3.5" />
           <element id="library" level="project" name="Maven: org.webjars:jquery:1.11.1" />
+          <element id="library" level="project" name="Maven: mysql:mysql-connector-java:5.1.38" />
           <element id="library" level="project" name="Maven: com.h2database:h2:1.4.187" />
           <element id="library" level="project" name="Maven: org.projectlombok:lombok:1.16.6" />
           <element id="library" level="project" name="Maven: org.modelmapper:modelmapper:0.7.4" />

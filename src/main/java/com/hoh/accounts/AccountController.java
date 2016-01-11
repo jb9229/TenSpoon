@@ -71,11 +71,11 @@ public class AccountController {
     }
 
 
-    @RequestMapping(value = "/accounts/auth/{email}/{key}", method = RequestMethod.GET)
+    @RequestMapping(value = "/auth/accounts/{email}/{key}", method = RequestMethod.GET)
     public ResponseEntity authAccountMail(@PathVariable String email, @PathVariable Double key){
         Account account         =   repository.findByEmail(email);
 
-        account.setAuthMailKey(null);
+        account.setAuthMailkey(null);
 
         Account updateAccount   =   repository.save(account);
 
@@ -163,5 +163,6 @@ public class AccountController {
 
         return errorResponse;
     }
+
 
 }

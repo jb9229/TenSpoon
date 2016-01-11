@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNotNull;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -79,6 +80,7 @@ public class AccountControllerTest {
         AccountDto.Create createDto =   accountCreateFixture();
 
 
+
         ResultActions result = mockMvc.perform(post("/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createDto)));
@@ -86,6 +88,19 @@ public class AccountControllerTest {
 
         result.andDo(print());
         result.andExpect(status().isCreated());
+
+
+        Account newAccount  =   service.getAccount((long)1);
+
+        Double authMailKey  =   newAccount.getAuthMailkey();
+
+        assertNotNull(authMailKey);
+
+        ResultActions authMailResult = mockMvc.perform(get("/auth/accounts/" + createDto.getEmail()+"/"+authMailKey));
+
+
+        authMailResult.andDo(print());
+        authMailResult.andExpect(status().isOk());
 
     }
 
@@ -129,7 +144,7 @@ public class AccountControllerTest {
 
         AccountDto.Create createDto =  accountCreateFixture();
 
-        ResultActions result = mockMvc.perform(get("/accounts/"+createDto.getEmail()));
+        ResultActions result = mockMvc.perform(get("/accounts/" + createDto.getEmail()));
 
         result.andDo(print());
         result.andExpect(status().isCreated());
@@ -137,15 +152,30 @@ public class AccountControllerTest {
     }
 
 
-
     @Test
-    public void getAccounts() throws Exception {
-        AccountDto.Create createDto =  accountCreateFixture();
+    public void chekAuthEmailAccount() throws Exception {
+        AccountDto.Create   createDto   =   accountCreateFixture();
+        createDto.setAuthMailKey(0.234);
 
         Account account                 =   service.createAccount(createDto);
 
-        ResultActions result    =   mockMvc.perform(get("/accounts?email=jinbeomjeong@google.com&size=2")
+        ResultActions result            =   mockMvc.perform(get("/accounts/"+account.getId())
                 .with(httpBasic(createDto.getEmail(), createDto.getPassword())));
+
+        result.andDo(print());
+        result.andExpect(status().isUnauthorized());
+    }
+
+
+
+    @Test
+    public void getAccounts() throws Exception {
+        AccountDto.Create create        =   accountCreateFixture();
+
+        Account account                 =   service.createAccount(create);
+
+        ResultActions result    =   mockMvc.perform(get("/accounts")
+                .with(httpBasic(create.getEmail(), create.getPassword())));
 
         result.andDo(print());
         result.andExpect(status().isOk());
@@ -154,6 +184,7 @@ public class AccountControllerTest {
     @Test
     public void getAccount() throws Exception {
         AccountDto.Create   createDto   =   accountCreateFixture();
+        createDto.setAuthMailKey(0.234);
 
         Account account                 =   service.createAccount(createDto);
 

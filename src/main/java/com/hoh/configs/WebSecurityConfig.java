@@ -55,10 +55,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.httpBasic();
 
         http.authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/accounts/**").hasRole("USER")
+                .antMatchers(HttpMethod.GET, "/accounts/**").permitAll()
                 .antMatchers(HttpMethod.PUT, "/accounts/**").hasRole("USER")
                 .antMatchers(HttpMethod.DELETE, "/accounts/**").hasRole("USER")
-                .antMatchers(HttpMethod.GET, "/accounts/").permitAll()
+                .antMatchers(HttpMethod.GET, "/auth/accounts/**").permitAll()
                 .anyRequest().permitAll()
                 .and()
             .formLogin()
@@ -86,7 +86,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public JdbcTokenRepositoryImpl jdbcTokenRepository(){
         JdbcTokenRepositoryImpl jdbcTokenRepository     =       new JdbcTokenRepositoryImpl();
-        jdbcTokenRepository.setCreateTableOnStartup(true);
+        jdbcTokenRepository.setCreateTableOnStartup(false);
         jdbcTokenRepository.setDataSource(dataSource);
 
         return jdbcTokenRepository;

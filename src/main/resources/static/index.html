@@ -8,10 +8,11 @@
 
     <script src="/webjars/react/0.13.3/react.min.js"></script>
     <script src="/webjars/react/0.13.3/JSXTransformer.js"></script>
+    <script src="/webjars/jquery/1.11.1/jquery.min.js"></script>
 </head>
 <body>
     <!--<script type="text/jsx" src="main.js"></script>-->
-    <div id="content"></div>
+    <div id="content">워딩</div>
 
     <script type="text/jsx">
         var AccountBox  =   React.createClass({
@@ -21,7 +22,7 @@
                    dataType: 'json',
                    cache: false,
                    success: function(data) {
-                       this.setState({data: data});
+                       this.setState({data: data.content});
                    }.bind(this),
                    error: function(xhr, status, err){
                        console.error(this.props.url, status, err.toString());
@@ -40,7 +41,6 @@
                         <div className="accountBox">
                             <h1>사용자</h1>
                             <AccountList data={this.state.data} />
-                            <AccountForm />
                         </div>
                 );
             }
@@ -55,6 +55,7 @@
                             </Account>
                     );
                 });
+
                 return (
                         <div className="accountList">
                             {accountNodes}
