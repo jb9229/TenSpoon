@@ -41,4 +41,15 @@ public class Account {
     private Date updated;
 
     private boolean admin;
+
+
+
+    private int riceTol;
+
+    private int riceTemp;
+
+    private int riceMonth;
+
+    private int riceYear;
+
 }

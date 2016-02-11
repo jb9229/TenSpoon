@@ -66,4 +66,34 @@ public class AccountService {
         repository.delete(getAccount(id));
     }
 
+    public int addRice(Account account, int rice) {
+
+        int donationRice;
+
+        account.setRiceTol(account.getRiceTol() + rice);
+        account.setRiceMonth(account.getRiceMonth() + rice);
+        account.setRiceYear(account.getRiceYear() + rice);
+
+        account.setRiceTemp(account.getRiceTemp()+rice);
+
+        if(account.getRiceTemp() > 100)
+        {
+            double donationRiceOri  =   account.getRiceTemp()/100;
+
+            donationRice            =   (int)donationRiceOri;
+
+            donationRice            =   donationRice * 100;
+
+
+
+            account.setRiceTemp(account.getRiceTemp()   -  donationRice );
+        }else
+        {
+            donationRice    =   0;
+        }
+
+
+
+        return donationRice;
+    }
 }
