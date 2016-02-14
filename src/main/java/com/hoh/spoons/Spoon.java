@@ -19,11 +19,11 @@ public class Spoon {
     @GeneratedValue
     private Long id;
 
-    private int rice_tol;
+    private int riceTol;
 
-    private int rice_perc;
+    private int ricePercent;
 
-    private Long account_id;
+    private Long accountId;
 
     private Bowl bowl;
 }
