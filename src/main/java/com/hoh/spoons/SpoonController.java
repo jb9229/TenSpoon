@@ -1,6 +1,8 @@
 package com.hoh.spoons;
 
 import com.hoh.accounts.*;
+import com.hoh.bowls.BowlFullException;
+import com.hoh.bowls.BowlRepository;
 import com.hoh.common.ErrorResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,7 @@ public class SpoonController {
     private AccountService accountService;
 
 
+
     @RequestMapping(value="/spoon/rice/add/{accountId}/{rice}", method = RequestMethod.GET)
     public ResponseEntity addRice(@PathVariable Long accountId, @PathVariable int rice){
 
@@ -29,6 +32,9 @@ public class SpoonController {
 
         spoonService.addRice(account, rice);
 
+
+        //TODO RespnseEntity 결정 및 협의
+        return new ResponseEntity<>(account, HttpStatus.OK);
     }
 
 
@@ -38,6 +44,17 @@ public class SpoonController {
         ErrorResponse errorResponse  =   new ErrorResponse();
         errorResponse.setMessage("["+ e.getId()+"]에 해당하는 계정이 없습니다.");
         errorResponse.setCode("account.not.found.exception");
+
+        return errorResponse;
+    }
+
+
+    @ExceptionHandler(BowlFullException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handlerBowlFullException(BowlFullException e){
+        ErrorResponse errorResponse  =   new ErrorResponse();
+        errorResponse.setMessage(e.getMessage());
+        errorResponse.setCode("bowl.full.exception");
 
         return errorResponse;
     }

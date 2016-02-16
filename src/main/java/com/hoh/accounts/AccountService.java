@@ -56,8 +56,17 @@ public class AccountService {
 
 
     public Account updateAccount(Account account, AccountDto.Update updateDto) {
-        account.setPassword(passwordEncoder.encode(account.getPassword()));
+        account.setPassword(passwordEncoder.encode(updateDto.getPassword()));
         account.setUsername(updateDto.getUsername());
+
+        return repository.save(account);
+    }
+
+    public Account updateRiceAccount(Account account, AccountDto.RiceUpdate updateDto) {
+        account.setRiceTol(updateDto.getRiceTol());
+        account.setRiceMonth(updateDto.getRiceMonth());
+        account.setRiceYear(updateDto.getRiceYear());
+        account.setRiceTemp(updateDto.getRiceTemp());
 
         return repository.save(account);
     }
@@ -66,15 +75,15 @@ public class AccountService {
         repository.delete(getAccount(id));
     }
 
-    public int addRice(Account account, int rice) {
+    public int addRice(Account account, AccountDto.RiceUpdate riceUpdate,  int rice) {
 
         int donationRice;
 
-        account.setRiceTol(account.getRiceTol() + rice);
-        account.setRiceMonth(account.getRiceMonth() + rice);
-        account.setRiceYear(account.getRiceYear() + rice);
+        riceUpdate.setRiceTol(account.getRiceTol() + rice);
+        riceUpdate.setRiceMonth(account.getRiceMonth() + rice);
+        riceUpdate.setRiceYear(account.getRiceYear() + rice);
 
-        account.setRiceTemp(account.getRiceTemp()+rice);
+        riceUpdate.setRiceTemp(account.getRiceTemp()+rice);
 
         if(account.getRiceTemp() > 100)
         {
@@ -86,7 +95,7 @@ public class AccountService {
 
 
 
-            account.setRiceTemp(account.getRiceTemp()   -  donationRice );
+            riceUpdate.setRiceTemp(account.getRiceTemp()   -  donationRice );
         }else
         {
             donationRice    =   0;

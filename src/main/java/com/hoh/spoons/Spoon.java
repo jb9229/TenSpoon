@@ -7,6 +7,7 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  * Created by test on 2016-01-31.
@@ -25,5 +26,6 @@ public class Spoon {
 
     private Long accountId;
 
+    @ManyToOne
     private Bowl bowl;
 }

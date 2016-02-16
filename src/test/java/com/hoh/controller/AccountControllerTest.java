@@ -81,7 +81,7 @@ public class AccountControllerTest {
 
 
 
-        ResultActions result = mockMvc.perform(post("/accounts")
+        ResultActions result = mockMvc.perform(post("/api/v1/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createDto)));
         result.andExpect(jsonPath("$.username", is("Jinbeom")));
@@ -96,7 +96,7 @@ public class AccountControllerTest {
 
         assertNotNull(authMailKey);
 
-        ResultActions authMailResult = mockMvc.perform(get("/auth/accounts/" + createDto.getEmail()+"/"+authMailKey));
+        ResultActions authMailResult = mockMvc.perform(get("/api/v1/auth/accounts/" + createDto.getEmail() + "/" + authMailKey));
 
 
         authMailResult.andDo(print());
@@ -110,7 +110,7 @@ public class AccountControllerTest {
         createDto.setUsername("   ");
         createDto.setPassword("1234");
 
-        ResultActions result    =   mockMvc.perform(post("/accounts")
+        ResultActions result    =   mockMvc.perform(post("/api/v1/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createDto)));
 
@@ -123,7 +123,7 @@ public class AccountControllerTest {
 
         AccountDto.Create createDto =  accountCreateFixture();
 
-        ResultActions result = mockMvc.perform(post("/accounts")
+        ResultActions result = mockMvc.perform(post("/api/v1/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createDto)));
 
@@ -139,17 +139,6 @@ public class AccountControllerTest {
         result.andExpect(status().isBadRequest());
     }
 
-    @Test
-    public void checkAccout() throws Exception {
-
-        AccountDto.Create createDto =  accountCreateFixture();
-
-        ResultActions result = mockMvc.perform(get("/accounts/" + createDto.getEmail()));
-
-        result.andDo(print());
-        result.andExpect(status().isCreated());
-
-    }
 
 
     @Test
@@ -159,7 +148,7 @@ public class AccountControllerTest {
 
         Account account                 =   service.createAccount(createDto);
 
-        ResultActions result            =   mockMvc.perform(get("/accounts/"+account.getId())
+        ResultActions result            =   mockMvc.perform(get("/api/v1/accounts/"+account.getId())
                 .with(httpBasic(createDto.getEmail(), createDto.getPassword())));
 
         result.andDo(print());
@@ -174,7 +163,9 @@ public class AccountControllerTest {
 
         Account account                 =   service.createAccount(create);
 
-        ResultActions result    =   mockMvc.perform(get("/accounts")
+        ResultActions result    =   mockMvc.perform(get("/api/v1/accounts")
+                .param("email", "jinbeomjeong@google.com")
+                .param("size", "2")
                 .with(httpBasic(create.getEmail(), create.getPassword())));
 
         result.andDo(print());
@@ -188,7 +179,7 @@ public class AccountControllerTest {
 
         Account account                 =   service.createAccount(createDto);
 
-        ResultActions result            =   mockMvc.perform(get("/accounts/"+account.getId())
+        ResultActions result            =   mockMvc.perform(get("/api/v1/accounts/"+account.getId())
                 .with(httpBasic(createDto.getEmail(), createDto.getPassword())));
 
         result.andDo(print());
@@ -206,7 +197,7 @@ public class AccountControllerTest {
         updateDto.setPassword("changePassword");
         updateDto.setUsername("Jeong Jinbeom");
 
-        ResultActions resultActions     =   mockMvc.perform(put("/accounts/" + account.getId())
+        ResultActions resultActions     =   mockMvc.perform(put("/api/v1/accounts/" + account.getId())
                 .with(httpBasic(createDto.getEmail(), createDto.getPassword()))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(updateDto)));
@@ -224,7 +215,7 @@ public class AccountControllerTest {
         Account account                 =   service.createAccount(createDto);
 
 
-        ResultActions resultActions     =   mockMvc.perform(delete("/accounts/" + account.getId())
+        ResultActions resultActions     =   mockMvc.perform(delete("/api/v1/accounts/" + account.getId())
         .with(httpBasic(createDto.getEmail(), createDto.getPassword())));
 
 
@@ -234,7 +225,7 @@ public class AccountControllerTest {
 
     @Test
     public void deleteAccount_BedRequest() throws Exception {
-        ResultActions resultActions     =   mockMvc.perform(delete("/accounts/1"));
+        ResultActions resultActions     =   mockMvc.perform(delete("/api/v1/accounts/1"));
 
 
         resultActions.andDo(print());
@@ -249,7 +240,7 @@ public class AccountControllerTest {
         Account account                 =   service.createAccount(createDto);
 
 
-        ResultActions resultActions     =   mockMvc.perform(post("/auth/login").param("email", "jinbeomjeong@google.com").param("password", "123456"));
+        ResultActions resultActions     =   mockMvc.perform(post("/api/v1/auth/login").param("email", "jinbeomjeong@google.com").param("password", "123456"));
 
         resultActions.andDo(print());
         resultActions.andExpect(status().isOk());
@@ -260,7 +251,7 @@ public class AccountControllerTest {
         AccountDto.Create   createDto   =   accountCreateFixture();
         Account account                 =   service.createAccount(createDto);
 
-        ResultActions resultActions     =   mockMvc.perform(get("/auth/logout"));
+        ResultActions resultActions     =   mockMvc.perform(get("/api/v1/auth/logout"));
 
         resultActions.andDo(print());
         resultActions.andExpect(status().isOk());

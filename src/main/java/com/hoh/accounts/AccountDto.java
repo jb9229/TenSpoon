@@ -58,4 +58,15 @@ public class AccountDto {
         private String password;
         private String username;
     }
+
+    @Data
+    public static class RiceUpdate{
+        private int riceTol;
+
+        private int riceTemp;
+
+        private int riceMonth;
+
+        private int riceYear;
+    }
 }

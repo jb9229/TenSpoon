@@ -25,6 +25,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
  * Created by test on 2015-10-18.
  */
 @RestController
+@RequestMapping("/api/v1/")
 public class AccountController {
     @Autowired
     private AccountService service;
