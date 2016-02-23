@@ -40,6 +40,14 @@ public class AccountDto {
         private Double authMailKey;
     }
 
+
+    @Data
+    public static class Update {
+        private String password;
+        private String username;
+    }
+
+
     @Data
     public static class Response{
         private Long id;
@@ -53,11 +61,6 @@ public class AccountDto {
         private Double authMailKey;
     }
 
-    @Data
-    public static class Update {
-        private String password;
-        private String username;
-    }
 
     @Data
     public static class RiceUpdate{
@@ -67,6 +70,18 @@ public class AccountDto {
 
         private int riceMonth;
 
+        private int riceYear;
+    }
+
+
+    @Data
+    public static class RiceResponse{
+        private Long id;
+        private String username;
+
+        private int riceTol;
+        private int riceTemp;
+        private int riceMonth;
         private int riceYear;
     }
 }

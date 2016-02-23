@@ -2,8 +2,8 @@ package com.hoh.spoons;
 
 import com.hoh.accounts.*;
 import com.hoh.bowls.BowlFullException;
-import com.hoh.bowls.BowlRepository;
 import com.hoh.common.ErrorResponse;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
  * Created by test on 2016-01-31.
  */
 @RestController
+@RequestMapping("/api/v1/")
 public class SpoonController {
 
     @Autowired
@@ -21,6 +22,9 @@ public class SpoonController {
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
 
 
@@ -33,8 +37,8 @@ public class SpoonController {
         spoonService.addRice(account, rice);
 
 
-        //TODO RespnseEntity 결정 및 협의
-        return new ResponseEntity<>(account, HttpStatus.OK);
+        //TODO ResponseEntity 결정 및 협의
+        return new ResponseEntity<>(modelMapper.map(account, AccountDto.RiceResponse.class), HttpStatus.OK);
     }
 
 

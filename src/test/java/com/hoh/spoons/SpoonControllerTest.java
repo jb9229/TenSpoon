@@ -1,0 +1,70 @@
+package com.hoh.spoons;
+
+import com.hoh.Application;
+import com.hoh.accounts.Account;
+import com.hoh.accounts.AccountDto;
+import com.hoh.accounts.AccountService;
+import com.hoh.account.AccountControllerTest;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.security.web.FilterChainProxy;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+/**
+ * Created by jeong on 2016-02-23.
+ */
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = Application.class)
+@WebAppConfiguration
+public class SpoonControllerTest {
+
+    MockMvc mockMvc = null;
+
+    @Autowired
+    WebApplicationContext wac;
+
+    @Autowired
+    private FilterChainProxy filterChainProxy;
+
+
+
+    @Autowired
+    AccountService accountService;
+
+
+    @Before
+    public void setUp() throws Exception {
+        mockMvc = MockMvcBuilders.webAppContextSetup(wac)
+                .addFilter(filterChainProxy)
+                .build();
+    }
+
+
+    @Test
+    public void testAddRice() throws Exception {
+        AccountDto.Create create        =   AccountControllerTest.accountCreateFixture();
+
+        Account account                 =   accountService.createAccount(create);
+
+
+        ResultActions result = mockMvc.perform(get("/api/v1/spoon/rice/add/" + account.getId() + "/150")
+                .with(httpBasic(create.getEmail(), create.getPassword())));
+
+        result.andDo(print());
+        result.andExpect(status().isOk());
+    }
+}

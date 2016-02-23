@@ -85,7 +85,7 @@ public class AccountService {
 
         riceUpdate.setRiceTemp(account.getRiceTemp()+rice);
 
-        if(account.getRiceTemp() > 100)
+        if(riceUpdate.getRiceTemp() > 100)
         {
             double donationRiceOri  =   account.getRiceTemp()/100;
 

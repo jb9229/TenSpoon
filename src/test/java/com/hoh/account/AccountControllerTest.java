@@ -1,4 +1,4 @@
-package com.hoh.controller;
+package com.hoh.account;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hoh.Application;
@@ -58,7 +58,7 @@ public class AccountControllerTest {
 
 
 
-    private AccountDto.Create accountCreateFixture(){
+    public static AccountDto.Create accountCreateFixture(){
         AccountDto.Create createDto =   new AccountDto.Create();
         createDto.setUsername("Jinbeom");
         createDto.setEmail("jinbeomjeong@google.com");
