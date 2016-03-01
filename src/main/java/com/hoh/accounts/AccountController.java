@@ -45,7 +45,8 @@ public class AccountController {
     @RequestMapping(value="/accounts", method = RequestMethod.POST)
     public ResponseEntity createAccount(@RequestBody @Valid AccountDto.Create create, BindingResult result){
 
-        if(result.hasErrors()){
+        if(result.hasErrors())
+        {
             ErrorResponse errorResponse =   new ErrorResponse();
 
             errorResponse.setMessage(result.toString());
@@ -126,7 +127,8 @@ public class AccountController {
 
         Account account     =   repository.findOne(id);
 
-        if(account  ==  null){
+        if(account  ==  null)
+        {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 

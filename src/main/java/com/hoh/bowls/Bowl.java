@@ -18,7 +18,25 @@ public class Bowl {
     @GeneratedValue
     private Long id;
 
+    private short theme;
+
+    private String org;
+
     private String title;
+
+    private String summary;
+
+    private String contents;
+
+    private String photo1;
+
+    private String photo2;
+
+    private String photo3;
+
+    private String photo4;
+
+    private String photo5;
 
     private int riceTol;
 
