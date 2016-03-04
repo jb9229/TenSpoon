@@ -3,9 +3,7 @@ package com.hoh.bowls;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Created by test on 2016-01-31.
@@ -18,7 +16,8 @@ public class Bowl {
     @GeneratedValue
     private Long id;
 
-    private short theme;
+    @Enumerated(EnumType.ORDINAL)
+    private BowlType theme;
 
     private String org;
 

@@ -46,7 +46,7 @@ public class BowlController {
     }
 
 
-    @RequestMapping(value="/bowls/{id}", method = RequestMethod.POST)
+    @RequestMapping(value="/bowls/{id}", method = RequestMethod.PUT)
     public ResponseEntity updateBowl(@PathVariable Long id, @RequestBody @Valid BowlDto.Update update, BindingResult result){
 
         if(result.hasErrors())

@@ -13,7 +13,7 @@ public class BowlDto {
     @Data
     public static class Create{
 
-        private short theme;
+        private BowlType theme;
 
         @NotBlank
         @Size(min=1, max = 45)
@@ -44,7 +44,7 @@ public class BowlDto {
 
     @Data
     public static class Update{
-        private short theme;
+        private BowlType theme;
 
         @NotBlank
         @Size(min=1, max = 45)
@@ -75,7 +75,7 @@ public class BowlDto {
 
     @Data
     public static class Response{
-        private short theme;
+        private BowlType theme;
 
         private String org;
 
