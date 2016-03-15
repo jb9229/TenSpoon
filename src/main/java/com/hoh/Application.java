@@ -1,6 +1,7 @@
 package com.hoh;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -10,6 +11,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.io.File;
 import java.util.Properties;
 
 /**
@@ -17,6 +19,8 @@ import java.util.Properties;
  */
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer{
+
+    public static String ROOT   =   "D:/1_work/fileserver/img";
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application){
@@ -28,6 +32,12 @@ public class Application extends SpringBootServletInitializer{
         SpringApplication.run(Application.class, args);
     }
 
+    @Bean
+    CommandLineRunner init() {
+        return (String[] args) -> {
+            new File(ROOT).mkdir();
+        };
+    }
     @Bean
     public ModelMapper modelMapper(){
         return new ModelMapper();

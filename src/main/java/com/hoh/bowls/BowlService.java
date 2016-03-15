@@ -52,7 +52,7 @@ public class BowlService {
         return repository.save(bowl);
     }
 
-    private Bowl getBowl(Long id) {
+    public Bowl getBowl(Long id) {
         Bowl bowl   =   repository.findOne(id);
 
         if(bowl == null)

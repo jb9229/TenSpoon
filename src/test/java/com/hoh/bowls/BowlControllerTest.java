@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -87,7 +88,7 @@ public class BowlControllerTest {
         createDto.setTheme(BowlType.Senior);
         createDto.setSummary("폐지를 주우시며 힘들었던 할머니가 몸까지 않좋아 지셨어요, 이젠 저희가 도울 때 입니다.");
         createDto.setOrg("십시일반");
-        createDto.setContents("생활보허 대상자 할머니가 폐지를 주우며 근근히 살아가셨는데, 얼마전 허리를 다치셔서 이제는 거동이 불펴" +
+        createDto.setContents("생활보허 대상자 할머니가 폐지를 주우며 근근히 살아가셨는데, 얼마전 허리를 다치셔서 이제는 거동이 불편" +
                 "하싶니다, 아끼며 드시는 쌀은 곰팡이가 든지 오래 됬습니다, 안 믿기시겠지만 저희가 무관심할 때 주위 한 편에서는" +
                 "상상하기도 어려움 일들이 벌어지고 있습니다.");
         createDto.setPhoto1("photo1.png");
@@ -112,6 +113,63 @@ public class BowlControllerTest {
 
         result.andDo(print());
         result.andExpect(status().isCreated());
+    }
+
+    @Test
+     public void testGetBowl() throws Exception {
+        AccountDto.Create create        =   accountCreateFixture();
+        Account account                 =   accountService.createAccount(create);
+
+        BowlDto.Create createBowl       =   bowlCreateFixture();
+        Bowl bowl                       =   service.createBowl(createBowl);
+
+
+        ResultActions result = mockMvc.perform(get("/api/v1/bowls/" + bowl.getId())
+                .with(httpBasic(create.getEmail(), create.getPassword())));
+
+        result.andDo(print());
+        result.andExpect(status().isOk());
+    }
+
+    @Test
+    public void testUploadImage() throws Exception {
+        AccountDto.Create create        =   accountCreateFixture();
+        Account account                 =   accountService.createAccount(create);
+
+        BowlDto.Create createBowl       =   bowlCreateFixture();
+        Bowl bowl                       =   service.createBowl(createBowl);
+
+
+        MockMultipartFile file      =   new MockMultipartFile("file", "testFile.txt", "text/plain", "some xml".getBytes());
+
+
+        ResultActions result = mockMvc.perform(fileUpload("/api/v1/bowls/image/upload")
+                .file(file)
+                .param("name", "testFile.txt")
+                .with(httpBasic(create.getEmail(), create.getPassword())));
+
+
+        result.andDo(print());
+        result.andExpect(status().isOk());
+    }
+
+    @Test
+    public void testGetBowls() throws Exception {
+        AccountDto.Create create        =   accountCreateFixture();
+        Account account                 =   accountService.createAccount(create);
+
+        BowlDto.Create createBowl       =   bowlCreateFixture();
+        Bowl bowl                       =   service.createBowl(createBowl);
+
+
+        ResultActions result = mockMvc.perform(get("/api/v1/bowls/")
+                .param("theme", "Senior")
+                .param("size", "2")
+                .with(httpBasic(create.getEmail(), create.getPassword())));
+
+
+        result.andDo(print());
+        result.andExpect(status().isOk());
     }
 
     @Test

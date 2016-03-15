@@ -96,7 +96,6 @@ public class AccountController {
         Page<Account> page              =      repository.findAll(spec, pageable);
 
 
-        //TODO limit & email 조건
         List<AccountDto.Response> content = page.getContent().parallelStream()
                 .map(newAccount -> modelMapper.map(newAccount, AccountDto.Response.class))
                 .collect(Collectors.toList());
