@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by test on 2016-01-31.
@@ -27,15 +29,13 @@ public class Bowl {
 
     private String contents;
 
-    private String photo1;
+    private String imgthumbnail;
 
-    private String photo2;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date startday;
 
-    private String photo3;
-
-    private String photo4;
-
-    private String photo5;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date endday;
 
     private int riceTol;
 

@@ -21,6 +21,13 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileReader;
+import java.nio.file.Files;
+import java.util.Date;
+
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
@@ -88,10 +95,12 @@ public class BowlControllerTest {
         createDto.setTheme(BowlType.Senior);
         createDto.setSummary("폐지를 주우시며 힘들었던 할머니가 몸까지 않좋아 지셨어요, 이젠 저희가 도울 때 입니다.");
         createDto.setOrg("십시일반");
-        createDto.setContents("생활보허 대상자 할머니가 폐지를 주우며 근근히 살아가셨는데, 얼마전 허리를 다치셔서 이제는 거동이 불편" +
+        createDto.setContents("<img src='/filesystem/img/Koala.jpg'/>생활보허 대상자 할머니가 폐지를 주우며 근근히 살아가셨는데, 얼마전 허리를 다치셔서 이제는 거동이 불편" +
                 "하싶니다, 아끼며 드시는 쌀은 곰팡이가 든지 오래 됬습니다, 안 믿기시겠지만 저희가 무관심할 때 주위 한 편에서는" +
                 "상상하기도 어려움 일들이 벌어지고 있습니다.");
-        createDto.setPhoto1("photo1.png");
+
+        createDto.setStartday(new Date());
+        createDto.setEndday(new Date());
 
 
         return createDto;
@@ -139,13 +148,14 @@ public class BowlControllerTest {
         BowlDto.Create createBowl       =   bowlCreateFixture();
         Bowl bowl                       =   service.createBowl(createBowl);
 
+        File ufile   =   new File("C:\\notitle.PNG");
 
-        MockMultipartFile file      =   new MockMultipartFile("file", "testFile.txt", "text/plain", "some xml".getBytes());
+        MockMultipartFile file      =   new MockMultipartFile("file", "upload.PNG", "text/plain", Files.readAllBytes(ufile.toPath()));
 
 
         ResultActions result = mockMvc.perform(fileUpload("/api/v1/bowls/image/upload")
                 .file(file)
-                .param("name", "testFile.txt")
+                .param("name", "upload.PNG")
                 .with(httpBasic(create.getEmail(), create.getPassword())));
 
 

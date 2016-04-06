@@ -69,11 +69,7 @@ public class BowlService {
         bowl.setContents(update.getContents());
         bowl.setOrg(update.getOrg());
         bowl.setSummary(update.getSummary());
-        bowl.setPhoto1(update.getPhoto1());
-        bowl.setPhoto2(update.getPhoto2());
-        bowl.setPhoto3(update.getPhoto3());
-        bowl.setPhoto4(update.getPhoto4());
-        bowl.setPhoto5(update.getPhoto5());
+
 
         return repository.save(bowl);
     }

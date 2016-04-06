@@ -1,5 +1,7 @@
 package com.hoh.accounts;
 
+import com.hoh.Application;
+import com.hoh.TSWebMvcConfiguration;
 import com.hoh.common.Email;
 import com.hoh.common.EmailSender;
 import com.hoh.common.ErrorResponse;
@@ -12,10 +14,15 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -86,6 +93,23 @@ public class AccountController {
 
     }
 
+    @RequestMapping(value="/accounts/bowl/{bowlId}", method = GET)
+    public ResponseEntity getBowlAccounts(@PathVariable Long bowlId, Pageable pageable){
+
+
+        Page<Account> page              =      repository.findByBowl(bowlId, pageable);
+
+
+        List<AccountDto.Response> content = page.getContent().parallelStream()
+                .map(newAccount -> modelMapper.map(newAccount, AccountDto.Response.class))
+                .collect(Collectors.toList());
+
+
+        PageImpl<AccountDto.Response> result    =   new PageImpl<>(content, pageable, page.getTotalElements());
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+
     @RequestMapping(value="/accounts", method = GET)
     public ResponseEntity getAccounts(Account account, Pageable pageable){
 
@@ -135,6 +159,29 @@ public class AccountController {
 
         return new ResponseEntity<>(modelMapper.map(updateAccount, AccountDto.Response.class),
                 HttpStatus.OK);
+    }
+
+
+    @RequestMapping(value="/accounts/image/upload", method = RequestMethod.POST )
+    public String uploadProfilePhoto(@RequestParam("name") String name, @RequestParam("file")MultipartFile file){
+
+
+        File newFile    =   null;
+        if(!file.isEmpty()){
+            try{
+                BufferedOutputStream stream     =   new BufferedOutputStream(
+                        new FileOutputStream(newFile = new File(Application.FILESERVER_IMG_PROFILE+"/"+ name)));
+
+                FileCopyUtils.copy(file.getInputStream(), stream);
+
+                stream.close();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+
+
+        return TSWebMvcConfiguration.FILESYSTEM_PATH + "img/profile/" + newFile.getName();
     }
 
 

@@ -28,7 +28,7 @@ public class SpoonService {
     private AccountService accountService;
 
     @Autowired
-    private SpoonRepository spoonRepository;
+    private SpoonRepository repository;
 
     @Autowired
     private BowlService bowlService;
@@ -48,9 +48,7 @@ public class SpoonService {
 
         if(donationRice > 0)
         {
-            Specification<Spoon> spec       =   Specifications.where(SpoonSpecs.accountIdEqual(account.getId()));
-
-            Page<Spoon> page                =   getSpoons(spec, new PageRequest(0, 10));
+            Page<Spoon> page                =   getAccountSpoons(account.getId());
 
             List<Spoon> spoons              =   page.getContent();
 
@@ -95,12 +93,40 @@ public class SpoonService {
     }
 
 
+    public void deleteSpoon(Long id) {
+        repository.delete(getSpoon(id));
+    }
+
+
+    public Spoon getSpoon(Long id){
+
+
+        Spoon spoon                =   repository.findOne(id);
+
+        if(spoon == null)
+        {
+            throw new SpoonNotFoundException(id);
+        }
+
+
+        return spoon;
+    }
+
 
     public Page<Spoon> getSpoons(Specification<Spoon> spec, Pageable pageable){
 
 
-        Page<Spoon> page                =   spoonRepository.findAll(spec, pageable);
+        Page<Spoon> page                =   repository.findAll(spec, pageable);
 
+
+        return page;
+    }
+
+
+    public Page<Spoon> getAccountSpoons(Long accountId){
+        Specification<Spoon> spec       =   Specifications.where(SpoonSpecs.accountIdEqual(accountId));
+
+        Page<Spoon> page                =   getSpoons(spec, new PageRequest(0, 10));
 
         return page;
     }
@@ -110,7 +136,7 @@ public class SpoonService {
         spoon.setRiceTol(update.getRiceTol());
         spoon.setRicePercent(update.getRicePercent());
 
-        return spoonRepository.save(spoon);
+        return repository.save(spoon);
     }
-
+    
 }

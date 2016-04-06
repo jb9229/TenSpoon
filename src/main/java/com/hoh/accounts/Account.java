@@ -24,6 +24,8 @@ public class Account {
 
     private String username;
 
+    private String profilePhoto;
+
     private boolean female;
 
     private boolean single;

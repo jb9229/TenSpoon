@@ -4,6 +4,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 /**
  * Created by jeong on 2016-02-24.
@@ -31,15 +32,11 @@ public class BowlDto {
         @Size(min=1, max = 5000)
         private String contents;
 
-        private String photo1;
+        private String imgthumbnail;
 
-        private String photo2;
+        private Date startday;
 
-        private String photo3;
-
-        private String photo4;
-
-        private String photo5;
+        private Date endday;
     }
 
     @Data
@@ -62,19 +59,15 @@ public class BowlDto {
         @Size(min=1, max = 5000)
         private String contents;
 
-        private String photo1;
+        private Date startday;
 
-        private String photo2;
-
-        private String photo3;
-
-        private String photo4;
-
-        private String photo5;
+        private Date endday;
     }
 
     @Data
     public static class Response{
+        private Long id;
+
         private BowlType theme;
 
         private String org;
@@ -85,18 +78,16 @@ public class BowlDto {
 
         private String contents;
 
-        private String photo1;
+        private String imgthumbnail;
 
-        private String photo2;
+        private Date startday;
 
-        private String photo3;
-
-        private String photo4;
-
-        private String photo5;
+        private Date endday;
 
         private int riceTol;
 
         private int riceAim;
+
+        private boolean existSpoon;
     }
 }

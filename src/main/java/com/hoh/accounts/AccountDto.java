@@ -29,6 +29,8 @@ public class AccountDto {
         @Size(max = 45)
         private String username;
 
+        private String profilePhoto;
+
         private boolean female;
 
         private boolean single;
@@ -53,6 +55,7 @@ public class AccountDto {
         private Long id;
         private String email;
         private String username;
+        private String profilePhoto;
         private boolean female;
         private boolean single;
         private int birth;

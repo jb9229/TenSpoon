@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class SpoonController {
 
     @Autowired
-    private SpoonService spoonService;
+    private SpoonService service;
 
 
     @Autowired
@@ -34,11 +34,17 @@ public class SpoonController {
         Account account     =   accountService.getAccount(accountId);
 
 
-        spoonService.addRice(account, rice);
+        service.addRice(account, rice);
 
 
-        //TODO ResponseEntity 결정 및 협의
         return new ResponseEntity<>(modelMapper.map(account, AccountDto.RiceResponse.class), HttpStatus.OK);
+    }
+
+    @RequestMapping(value="/spoon/{id}/", method = RequestMethod.DELETE)
+    public ResponseEntity delete(@PathVariable Long id){
+        service.deleteSpoon(id);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 
@@ -63,4 +69,14 @@ public class SpoonController {
         return errorResponse;
     }
 
+
+    @ExceptionHandler(SpoonNotFoundException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handlerSpoonNotFoundException(SpoonNotFoundException e){
+        ErrorResponse errorResponse  =   new ErrorResponse();
+        errorResponse.setMessage("["+ e.getId()+"]에 해당하는 기부가 없습니다.");
+        errorResponse.setCode("spoon.not.found.exception");
+
+        return errorResponse;
+    }
 }

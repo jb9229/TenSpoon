@@ -20,7 +20,10 @@ import java.util.Properties;
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer{
 
-    public static String ROOT   =   "D:/1_work/fileserver/img";
+    public static final String FILESERVER                   =   "D:/1_work/fileserver/";
+    public static final String FILESERVER_IMG               =   "D:/1_work/fileserver/img"; //String webappRoot = servletContext.getRealPath("/");
+    public static final String FILESERVER_IMG_PROFILE       =   "D:/1_work/fileserver/img/profile";
+    public static final String FILESERVER_IMG_THUMBNAILS    =   "D:/1_work/fileserver/img/thumbnails/";
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application){
@@ -35,7 +38,9 @@ public class Application extends SpringBootServletInitializer{
     @Bean
     CommandLineRunner init() {
         return (String[] args) -> {
-            new File(ROOT).mkdir();
+            new File(FILESERVER_IMG).mkdir();
+            new File(FILESERVER_IMG_PROFILE).mkdir();
+            new File(FILESERVER_IMG_THUMBNAILS).mkdir();
         };
     }
     @Bean
