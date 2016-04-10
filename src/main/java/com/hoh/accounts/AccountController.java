@@ -19,6 +19,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -34,6 +37,12 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @RestController
 @RequestMapping("/api/v1/")
 public class AccountController {
+    public static final int INIT_PASSWORD_DIGIT     =   8;
+
+    public static final String REGIST_MAIL_TITLE        =   "[십시일반]가입을 축하 드립니다, 이메일 인증을 해 주세요";
+    public static final String INIT_MAIL_TITLE          =   "[십시일반] 비밀번호 초기화 했습니다";
+
+
     @Autowired
     private AccountService service;
 
@@ -50,7 +59,7 @@ public class AccountController {
 
 
     @RequestMapping(value="/accounts", method = RequestMethod.POST)
-    public ResponseEntity createAccount(@RequestBody @Valid AccountDto.Create create, BindingResult result){
+    public ResponseEntity createAccount(@RequestBody @Valid AccountDto.Create create, BindingResult result) throws MessagingException {
 
         if(result.hasErrors())
         {
@@ -69,9 +78,9 @@ public class AccountController {
 
 
         Email authenMail    =   new Email();
-        authenMail.setSubject("가입을 축하 드립니다, 이메일 인증을 해 주세요.");
+        authenMail.setSubject(REGIST_MAIL_TITLE);
         authenMail.setReceiver(newAccount.getEmail());
-        authenMail.setContent("<p> 십시일반 가입을 축하 드립니다, 하기 링크로 이메일 인증을 완료 해 주세요.</p> <a href='http://localhost:8080/accounts/auth/" + newAccount.getEmail() + "/" + authMailKey + "'>이메일 인증하러 가기</a>");
+        authenMail.setContent("<p> 십시일반 가입을 축하 드립니다, 하기 링크로 이메일 인증을 완료 해 주세요.</p> <a href='http://tenspoon.elasticbeanstalk.com/accounts/auth/" + newAccount.getEmail() + "/" + authMailKey + "'>이메일 인증하러 가기</a>");
 
         emailSender.sendMail(authenMail);
 
@@ -82,7 +91,7 @@ public class AccountController {
 
     @RequestMapping(value = "/auth/accounts/{email}/{key}", method = RequestMethod.GET)
     public ResponseEntity authAccountMail(@PathVariable String email, @PathVariable Double key){
-        Account account         =   repository.findByEmail(email);
+        Account account         =   service.getAccount(email);
 
         account.setAuthMailkey(null);
 
@@ -97,10 +106,12 @@ public class AccountController {
     public ResponseEntity getBowlAccounts(@PathVariable Long bowlId, Pageable pageable){
 
 
-        Page<Account> page              =      repository.findByBowl(bowlId, pageable);
+        //TODO findByBow 문제 해결
+//        Page<Account> page              =      repository.findByBowl(bowlId, pageable);
 
+        Page<Account> page              = null;
 
-        List<AccountDto.Response> content = page.getContent().parallelStream()
+         List<AccountDto.Response> content = page.getContent().parallelStream()
                 .map(newAccount -> modelMapper.map(newAccount, AccountDto.Response.class))
                 .collect(Collectors.toList());
 
@@ -132,12 +143,50 @@ public class AccountController {
 
     @RequestMapping(value="/accounts/{id}", method = GET )
     public ResponseEntity getAccount(@PathVariable Long id) {
-        Account account                     =   service.getAccount(id);
+        Account account =   service.getAccount(id);
 
         AccountDto.Response response        =   modelMapper.map(account, AccountDto.Response.class);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+
+    @RequestMapping(value="/accounts/password/", method = POST)
+    public ResponseEntity initPassword(@RequestParam("email") String emailAdd) throws Exception{
+
+        Account account             =   service.getAccount(emailAdd);
+
+
+        String randomPW             =   service.calRandomPW(INIT_PASSWORD_DIGIT);
+
+        AccountDto.Update update    =   new AccountDto.Update();
+        update.setPassword(randomPW);
+        update.setUsername(account.getUsername());
+
+
+        System.out.println(">>>>>>"+emailAdd);
+
+        Email email     =   new Email();
+        email.setSubject(INIT_MAIL_TITLE);
+        email.setContent("<div>안녕하세요. 십시일반 입니다." +
+                "<br><br>" +
+                "고객님의 비밀번호를 초기화 했습니다." +
+                "<br><br>" +
+                "<ul><li><b>초기화 비번: " + randomPW + "<b></li></ul>" +
+                "<br><br>" +
+                "<p>감사합니다.</p>" +
+                "</div>");
+        email.setReceiver(emailAdd);
+
+        emailSender.sendMail(email);
+
+
+        Account updateAccount = service.updateAccount(account, update);
+
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
     @RequestMapping(value="/accounts/{id}", method = PUT)
     public ResponseEntity updateAccount(@PathVariable Long id,
@@ -166,6 +215,7 @@ public class AccountController {
     public String uploadProfilePhoto(@RequestParam("name") String name, @RequestParam("file")MultipartFile file){
 
 
+        //TODO File Name Validation profile_photo length(45)
         File newFile    =   null;
         if(!file.isEmpty()){
             try{
@@ -213,5 +263,14 @@ public class AccountController {
         return errorResponse;
     }
 
+    @ExceptionHandler(MessagingException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handlerMessagingException(MessagingException e){
+        ErrorResponse errorResponse  =   new ErrorResponse();
+        errorResponse.setMessage("메일 전송에 실패 했습니다.");
+        errorResponse.setCode("mail.send.fail.exception");
+
+        return errorResponse;
+    }
 
 }

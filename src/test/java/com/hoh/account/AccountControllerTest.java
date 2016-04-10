@@ -61,7 +61,7 @@ public class AccountControllerTest {
     public static AccountDto.Create accountCreateFixture(){
         AccountDto.Create createDto =   new AccountDto.Create();
         createDto.setUsername("Jinbeom");
-        createDto.setEmail("jinbeomjeong@google.com");
+        createDto.setEmail("jb9229@gmail.com");
         createDto.setPassword("123456");
         createDto.setFemale(false);
         createDto.setSingle(true);
@@ -186,6 +186,20 @@ public class AccountControllerTest {
         result.andExpect(status().isOk());
     }
 
+
+    @Test
+    public void initPW() throws Exception {
+        AccountDto.Create   createDto   =   accountCreateFixture();
+        createDto.setAuthMailKey(0.234);
+
+        Account account                 =   service.createAccount(createDto);
+
+        ResultActions result            =   mockMvc.perform(post("/api/v1/accounts/password/")
+                .param("email", "jb9229@gmail.com"));
+
+        result.andDo(print());
+        result.andExpect(status().isOk());
+    }
 
 
     @Test

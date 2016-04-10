@@ -13,8 +13,36 @@
 <body>
     <!--<script type="text/jsx" src="main.js"></script>-->
     <div id="content">워딩</div>
+    <button onclick="">Create User</button>
 
     <script type="text/jsx">
+        var AccountForm = React.createClass({
+            handleSubmit: function(e) {
+                e.preventDefault();
+                var email = React.findDOMNode(this.refs.email).value.trim();
+                var password = React.findDOMNode(this.refs.password).value.trim();
+                if (!password || !email) {
+                    return;
+                }
+                this.props.onAccountSubmit({email: email, password: password});
+                React.findDOMNode(this.refs.email).value = '';
+                React.findDOMNode(this.refs.password).value = '';
+                return;
+            },
+            render: function() {
+                return (
+                        <form className="accountForm">
+                            <input type="email" placeholder="이메일" ref="email"/>
+                            <input type="password" placeholder="패스워드" ref="password"/>
+                            <input type="text" placeholder="사용자명" ref="username"/>
+
+
+                            <input type="submit" value="올리기" />
+                        </form>
+                );
+            }
+        });
+
         var AccountBox  =   React.createClass({
            loadAccountsFromServer: function() {
                $.ajax({

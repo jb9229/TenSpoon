@@ -19,19 +19,16 @@ public class EmailSender {
 
     @Autowired JavaMailSender mailSender;
 
-    public void sendMail(Email email){
+    public void sendMail(Email email) throws MessagingException {
         MimeMessage message     =   mailSender.createMimeMessage();
 
-        try {
-            MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
-            messageHelper.setSubject(email.getSubject());
-            messageHelper.setTo(email.getReceiver());
-            messageHelper.setFrom(sender);
-            messageHelper.setText(email.getContent(), true);
-            mailSender.send(message);
 
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
+        MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, "UTF-8");
+        messageHelper.setSubject(email.getSubject());
+        messageHelper.setTo(email.getReceiver());
+        messageHelper.setFrom(sender);
+        messageHelper.setText(email.getContent(), true);
+        mailSender.send(message);
+
     }
 }

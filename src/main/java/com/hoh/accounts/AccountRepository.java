@@ -17,6 +17,6 @@ public interface AccountRepository extends JpaRepository<Account, Long>{
 
     Page<Account> findAll(Specification<Account> spec, Pageable pageable);
 
-    @Query( value="select a from Account a join fetch Spoon s on a.id = s.accountId where s.bowl.id = :bowlId")
-    Page<Account> findByBowl(@Param("bowlId") Long bowlId, Pageable pageable);
+//    @Query( value="select a from com.hoh.accounts.Account a left join com.hoh.spoons.Spoon s on a.id = s.accountId where s.bowl.id = :bowlId")
+//    Page<Account> findByBowl(@Param("bowlId") Long bowlId, Pageable pageable);
 }
