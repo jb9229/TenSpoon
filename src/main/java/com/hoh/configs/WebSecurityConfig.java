@@ -59,7 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT, "/accounts/**").hasRole("USER")
                 .antMatchers(HttpMethod.DELETE, "/accounts/**").hasRole("USER")
                 .antMatchers(HttpMethod.PUT, "/spoon/**").hasRole("USER")
-                .antMatchers(HttpMethod.GET, "/auth/accounts/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/accounts/auth/**").permitAll()
                 .anyRequest().permitAll()
                 .and()
             .formLogin()

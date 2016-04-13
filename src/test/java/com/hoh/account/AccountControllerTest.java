@@ -72,19 +72,33 @@ public class AccountControllerTest {
         return createDto;
     }
 
+    public static AccountDto.Create obdonationAccountCreateFixture(){
+        AccountDto.Create createDto =   new AccountDto.Create();
+        createDto.setUsername("tenspoon");
+        createDto.setEmail("obdonation@gmail.com");
+        createDto.setPassword("123456");
+        createDto.setFemale(false);
+        createDto.setSingle(true);
+        createDto.setBirth(1983);
+        createDto.setResidence("충청북도 영동군");
+
+
+        return createDto;
+    }
+
 
 
     @Test
     public void createAccount() throws Exception {
 
-        AccountDto.Create createDto =   accountCreateFixture();
+        AccountDto.Create createDto =   obdonationAccountCreateFixture();
 
 
 
         ResultActions result = mockMvc.perform(post("/api/v1/accounts")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(createDto)));
-        result.andExpect(jsonPath("$.username", is("Jinbeom")));
+        result.andExpect(jsonPath("$.username", is("tenspoon")));
 
         result.andDo(print());
         result.andExpect(status().isCreated());
@@ -194,7 +208,7 @@ public class AccountControllerTest {
 
         Account account                 =   service.createAccount(createDto);
 
-        ResultActions result            =   mockMvc.perform(post("/api/v1/accounts/password/")
+        ResultActions result            =   mockMvc.perform(put("/api/v1/accounts/password/")
                 .param("email", "jb9229@gmail.com"));
 
         result.andDo(print());

@@ -80,7 +80,7 @@ public class AccountController {
         Email authenMail    =   new Email();
         authenMail.setSubject(REGIST_MAIL_TITLE);
         authenMail.setReceiver(newAccount.getEmail());
-        authenMail.setContent("<p> 십시일반 가입을 축하 드립니다, 하기 링크로 이메일 인증을 완료 해 주세요.</p> <a href='http://tenspoon.elasticbeanstalk.com/accounts/auth/" + newAccount.getEmail() + "/" + authMailKey + "'>이메일 인증하러 가기</a>");
+        authenMail.setContent("<p> 십시일반 가입을 축하 드립니다, 하기 링크로 이메일 인증을 완료 해 주세요.</p> <a href='http://tenspoon.elasticbeanstalk.com/api/v1/accounts/auth/" + newAccount.getEmail() + "/" + authMailKey + "'>이메일 인증하러 가기</a>");
 
         emailSender.sendMail(authenMail);
 
@@ -89,7 +89,7 @@ public class AccountController {
     }
 
 
-    @RequestMapping(value = "/auth/accounts/{email}/{key}", method = RequestMethod.GET)
+    @RequestMapping(value = "/accounts/auth/{email}/{key}", method = RequestMethod.GET)
     public ResponseEntity authAccountMail(@PathVariable String email, @PathVariable Double key){
         Account account         =   service.getAccount(email);
 
@@ -151,7 +151,7 @@ public class AccountController {
     }
 
 
-    @RequestMapping(value="/accounts/password/", method = POST)
+    @RequestMapping(value="/accounts/password/", method = PUT)
     public ResponseEntity initPassword(@RequestParam("email") String emailAdd) throws Exception{
 
         Account account             =   service.getAccount(emailAdd);
