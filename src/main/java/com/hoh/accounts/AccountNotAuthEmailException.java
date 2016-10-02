@@ -2,9 +2,6 @@ package com.hoh.accounts;
 
 import org.springframework.security.core.AuthenticationException;
 
-/**
- * Created by test on 2015-12-21.
- */
 public class AccountNotAuthEmailException extends AuthenticationException {
     String email;
 
@@ -14,6 +11,6 @@ public class AccountNotAuthEmailException extends AuthenticationException {
     }
 
     public String getEmail() {
-        return email;
+        return this.email;
     }
 }

@@ -7,6 +7,7 @@ import com.hoh.common.EmailSender;
 import com.hoh.common.ErrorResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -20,8 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.mail.MessagingException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -39,8 +38,12 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 public class AccountController {
     public static final int INIT_PASSWORD_DIGIT     =   8;
 
-    public static final String REGIST_MAIL_TITLE        =   "[ì‹­ì‹œì¼ë°˜]ê°€ì…ì„ ì¶•í•˜ ë“œë¦½ë‹ˆë‹¤, ì´ë©”ì¼ ì¸ì¦ì„ í•´ ì£¼ì„¸ìš”";
-    public static final String INIT_MAIL_TITLE          =   "[ì‹­ì‹œì¼ë°˜] ë¹„ë°€ë²ˆí˜¸ ì´ˆê¸°í™” í–ˆìŠµë‹ˆë‹¤";
+    public static final String REGIST_MAIL_TITLE        =   "[½Ê½ÃÀÏ¹İ]°¡ÀÔÀ» ÃàÇÏ µå¸³´Ï´Ù, ÀÌ¸ŞÀÏ ÀÎÁõÀ» ÇØ ÁÖ¼¼¿ä";
+    public static final String INIT_MAIL_TITLE          =   "[½Ê½ÃÀÏ¹İ] ºñ¹Ğ¹øÈ£ ÃÊ±âÈ­ Çß½À´Ï´Ù";
+
+
+    @Autowired
+    private MessageSource messageSource;
 
 
     @Autowired
@@ -80,7 +83,7 @@ public class AccountController {
         Email authenMail    =   new Email();
         authenMail.setSubject(REGIST_MAIL_TITLE);
         authenMail.setReceiver(newAccount.getEmail());
-        authenMail.setContent("<p> ì‹­ì‹œì¼ë°˜ ê°€ì…ì„ ì¶•í•˜ ë“œë¦½ë‹ˆë‹¤, í•˜ê¸° ë§í¬ë¡œ ì´ë©”ì¼ ì¸ì¦ì„ ì™„ë£Œ í•´ ì£¼ì„¸ìš”.</p> <a href='http://tenspoon.elasticbeanstalk.com/api/v1/accounts/auth/" + newAccount.getEmail() + "/" + authMailKey + "'>ì´ë©”ì¼ ì¸ì¦í•˜ëŸ¬ ê°€ê¸°</a>");
+        authenMail.setContent("<p> ½Ê½ÃÀÏ¹İ °¡ÀÔÀ» ÃàÇÏ µå¸³´Ï´Ù, ÇÏ±â ¸µÅ©·Î ÀÌ¸ŞÀÏ ÀÎÁõÀ» ¿Ï·á ÇØ ÁÖ¼¼¿ä.</p> <a href='http://tenspoon.elasticbeanstalk.com/api/v1/accounts/auth/" + newAccount.getEmail() + "/" + authMailKey + "'>ÀÌ¸ŞÀÏ ÀÎÁõÇÏ·¯ °¡±â</a>");
 
         emailSender.sendMail(authenMail);
 
@@ -106,7 +109,7 @@ public class AccountController {
     public ResponseEntity getBowlAccounts(@PathVariable Long bowlId, Pageable pageable){
 
 
-        //TODO findByBow ë¬¸ì œ í•´ê²°
+        //TODO findByBow ¹®Á¦ ÇØ°á
 //        Page<Account> page              =      repository.findByBowl(bowlId, pageable);
 
         Page<Account> page              = null;
@@ -168,13 +171,13 @@ public class AccountController {
 
         Email email     =   new Email();
         email.setSubject(INIT_MAIL_TITLE);
-        email.setContent("<div>ì•ˆë…•í•˜ì„¸ìš”. ì‹­ì‹œì¼ë°˜ ì…ë‹ˆë‹¤." +
+        email.setContent("<div>¾È³çÇÏ¼¼¿ä. ½Ê½ÃÀÏ¹İ ÀÔ´Ï´Ù." +
                 "<br><br>" +
-                "ê³ ê°ë‹˜ì˜ ë¹„ë°€ë²ˆí˜¸ë¥¼ ì´ˆê¸°í™” í–ˆìŠµë‹ˆë‹¤." +
+                "°í°´´ÔÀÇ ºñ¹Ğ¹øÈ£¸¦ ÃÊ±âÈ­ Çß½À´Ï´Ù." +
                 "<br><br>" +
-                "<ul><li><b>ì´ˆê¸°í™” ë¹„ë²ˆ: " + randomPW + "<b></li></ul>" +
+                "<ul><li><b>ÃÊ±âÈ­ ºñ¹ø: " + randomPW + "<b></li></ul>" +
                 "<br><br>" +
-                "<p>ê°ì‚¬í•©ë‹ˆë‹¤.</p>" +
+                "<p>°¨»çÇÕ´Ï´Ù.</p>" +
                 "</div>");
         email.setReceiver(emailAdd);
 
@@ -189,9 +192,7 @@ public class AccountController {
 
 
     @RequestMapping(value="/accounts/{id}", method = PUT)
-    public ResponseEntity updateAccount(@PathVariable Long id,
-                                        @RequestBody @Valid AccountDto.Update updateDto,
-                                        BindingResult result){
+    public ResponseEntity updateAccount(@PathVariable Long id, @RequestBody @Valid AccountDto.Update updateDto, BindingResult result){
 
         if(result.hasErrors()){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -247,7 +248,7 @@ public class AccountController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handlerUserDuplicatedException(UserDuplicatedException e){
         ErrorResponse   errorResponse   =   new ErrorResponse();
-        errorResponse.setMessage("["+ e.getUsername() + "] ì¤‘ë³µëœ username ì…ë‹ˆë‹¤.");
+        errorResponse.setMessage("["+ e.getUsername() + "] Áßº¹µÈ username ÀÔ´Ï´Ù.");
         errorResponse.setCode("duplicated.username.exception");
 
         return errorResponse;
@@ -257,7 +258,7 @@ public class AccountController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handlerAccountNotFoundException(AccountNotFoundException e){
         ErrorResponse errorResponse  =   new ErrorResponse();
-        errorResponse.setMessage("["+ e.getId()+"]ì— í•´ë‹¹í•˜ëŠ” ê³„ì •ì´ ì—†ìŠµë‹ˆë‹¤.");
+        errorResponse.setMessage("["+ e.getId()+"]¿¡ ÇØ´çÇÏ´Â °èÁ¤ÀÌ ¾ø½À´Ï´Ù.");
         errorResponse.setCode("account.not.found.exception");
 
         return errorResponse;
@@ -267,7 +268,7 @@ public class AccountController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handlerMessagingException(MessagingException e){
         ErrorResponse errorResponse  =   new ErrorResponse();
-        errorResponse.setMessage("ë©”ì¼ ì „ì†¡ì— ì‹¤íŒ¨ í–ˆìŠµë‹ˆë‹¤.");
+        errorResponse.setMessage("¸ŞÀÏ Àü¼Û¿¡ ½ÇÆĞ Çß½À´Ï´Ù.");
         errorResponse.setCode("mail.send.fail.exception");
 
         return errorResponse;

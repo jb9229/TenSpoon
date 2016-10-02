@@ -2,5 +2,24 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/hoh/accounts/Account.java" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/hoh/accounts/AccountController.java" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/hoh/accounts/AccountDto.java" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/hoh/accounts/AccountNotAuthEmailException.java" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/hoh/accounts/AccountNotFoundException.java" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/hoh/accounts/AccountRepository.java" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/hoh/accounts/AccountService.java" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/hoh/accounts/AccountSpecs.java" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/hoh/accounts/UserDuplicatedException.java" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/static/App.js" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/static/components" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/static/css" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/static/img" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/static/index.html" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/static/index_a.html" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/static/index_ts.html" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/static/index_ts2.html" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/static/js" charset="x-windows-949" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/static/main.css" charset="x-windows-949" />
   </component>
 </project>

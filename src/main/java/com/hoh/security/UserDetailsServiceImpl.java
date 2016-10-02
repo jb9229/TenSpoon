@@ -1,5 +1,9 @@
 package com.hoh.security;
 
+/**
+ * Created by test on 2016-09-24.
+ */
+
 import com.hoh.accounts.Account;
 import com.hoh.accounts.AccountNotAuthEmailException;
 import com.hoh.accounts.AccountRepository;
@@ -9,27 +13,23 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-/**
- * Created by jeong on 2015-11-05.
- */
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-
     @Autowired
     AccountRepository accountRepository;
 
-
-    @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Account account     =   accountRepository.findByEmail(email);
+        Account account     =   this.accountRepository.findByEmail(email);
 
-        if(account == null){
+        if (account == null)
+        {
             throw new UsernameNotFoundException(email);
         }
 
-        if(account.getAuthMailkey() != null){
-            throw new AccountNotAuthEmailException("["+email+"] 해당 이메일이 인증 되지 않았습니다.");
-        }
+//        if (account.getAuthMailkey() != null)
+//        {
+//            throw new AccountNotAuthEmailException("[" + email + "] 해당 계정을 찾을 수 없습니다.");
+//        }
 
         return new UserDetailsImpl(account);
     }

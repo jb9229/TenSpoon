@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TenSpoon</title>
+    <link type="text/css" rel="stylesheet" href="/webjars/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="main.css">
+
+    <script src="/webjars/react/0.14.8/react.min.js"></script>
+    <script src="/webjars/react/0.14.8/react-dom.js"></script>
+    <script src="/webjars/babel/5.8.29-1/browser.min.js"></script>
+    <script src="/webjars/jquery/1.11.1/jquery.min.js"></script>
+    <script src="/webjars/react-router/1.0.3/ReactRouter.min.js"></script>
+    <script src="/accounts/AccountAuthEmail.js"></script>
+</head>
+<body>
+
+    <div class="container" ng-show="!home.authenticated">
+        Login with: <a href="/login">Facebook</a>
+    </div>
+    <div class="container" ng-show="home.authenticated">
+        Logged in as: <span ng-bind="home.user"></span>
+    </div>
+    <script type="text/babel" src="App.js"></script>
+</body>
+</html>

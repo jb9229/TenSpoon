@@ -1,21 +1,16 @@
 package com.hoh.accounts;
 
+import java.util.Date;
+import javax.validation.constraints.Size;
+
 import lombok.Data;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.Size;
-import java.util.Date;
-
-/**
- * Created by test on 2015-10-18.
- */
 public class AccountDto {
 
-
     @Data
-    public static class Create{
-
+    public static class Create {
         @NotBlank
         @Size(min=5, max=100)
         @Email
@@ -41,7 +36,6 @@ public class AccountDto {
 
         private Double authMailKey;
     }
-
 
     @Data
     public static class Update {
@@ -88,4 +82,5 @@ public class AccountDto {
         private int riceMonth;
         private int riceYear;
     }
+
 }

@@ -5,6 +5,7 @@ import com.hoh.Application;
 import com.hoh.accounts.Account;
 import com.hoh.accounts.AccountDto;
 import com.hoh.accounts.AccountService;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,15 +18,20 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.util.Base64Utils;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 /**
  * Created by jeong on 2015-10-20.
@@ -193,7 +199,7 @@ public class AccountControllerTest {
 
         Account account                 =   service.createAccount(createDto);
 
-        ResultActions result            =   mockMvc.perform(get("/api/v1/accounts/"+account.getId())
+        ResultActions result            =   mockMvc.perform(get("/api/v1/accounts/" + account.getId())
                 .with(httpBasic(createDto.getEmail(), createDto.getPassword())));
 
         result.andDo(print());
@@ -285,5 +291,60 @@ public class AccountControllerTest {
         resultActions.andExpect(status().isOk());
     }
 
+    @Test
+    public void loginOath2() throws Exception {
+        AccountDto.Create create        =   accountCreateFixture();
 
+        Account account                 =   service.createAccount(create);
+
+        String accessToken = getAccessToken(create.getEmail(), create.getPassword());
+        System.out.println(accessToken);
+
+        // @formatter:off
+        ResultActions resultActions     =   mockMvc.perform(get("/api/v1/accounts")
+                .header("Authorization", "Bearer " + accessToken)
+                .param("email", account.getEmail()));
+
+        resultActions.andDo(print());
+        resultActions.andExpect(status().isOk());
+        // @formatter:on
+    }
+
+
+    private String getAccessToken(String email, String password) throws Exception {
+        String authorization = "Basic "
+                + new String(Base64Utils.encode("rest-client:rest-secret".getBytes()));
+        String contentType = MediaType.APPLICATION_JSON + ";charset=UTF-8";
+
+        // @formatter:off
+        String content = mockMvc
+                .perform(
+                        post("/oauth/token")
+                                .header("Authorization", authorization)
+                                .contentType(
+                                        MediaType.APPLICATION_FORM_URLENCODED)
+                                .param("username", email)
+                                .param("password", password)
+                                .param("grant_type", "password")
+                                .param("scope", "read write trust")
+                                .param("client_id", "rest-client")
+                                .param("client_secret", "rest-secret"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$.access_token", is(notNullValue())))
+                .andExpect(jsonPath("$.token_type", is(equalTo("bearer"))))
+//                .andExpect(jsonPath("$.refresh_token", is(notNullValue())))
+                .andExpect(jsonPath("$.expires_in", is(greaterThan(4000))))
+                .andExpect(jsonPath("$.scope", is(equalTo("read trust write"))))
+                .andReturn().getResponse().getContentAsString();
+
+        // @formatter:on
+        System.out.println(content);
+        JSONObject obj = new JSONObject(content);
+
+
+        String access_token = (String) obj.get("access_token");
+
+        return access_token;
+    }
 }

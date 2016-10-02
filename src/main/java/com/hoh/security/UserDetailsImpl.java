@@ -1,17 +1,19 @@
 package com.hoh.security;
 
+/**
+ * Created by test on 2016-09-24.
+ */
+
 import com.hoh.accounts.Account;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * Created by jeong on 2015-11-05.
- */
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+
 public class UserDetailsImpl extends User {
 
     public UserDetailsImpl(Account account) {
@@ -19,12 +21,15 @@ public class UserDetailsImpl extends User {
     }
 
     private static Collection<? extends GrantedAuthority> authorities(Account account) {
-        List<GrantedAuthority> authorities  =   new ArrayList<>();
+        List<GrantedAuthority> authorities = new ArrayList();
 
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-        if(account.isAdmin()){
+
+        if (account.isAdmin())
+        {
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
+
         return authorities;
     }
 }
