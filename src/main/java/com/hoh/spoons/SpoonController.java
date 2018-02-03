@@ -5,6 +5,7 @@ import com.hoh.bowls.BowlFullException;
 import com.hoh.common.ErrorResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +39,14 @@ public class SpoonController {
 
 
         return new ResponseEntity<>(modelMapper.map(account, AccountDto.RiceResponse.class), HttpStatus.OK);
+    }
+
+    @RequestMapping(value="/spoon/{accountid}", method = RequestMethod.GET)
+    public ResponseEntity get(@PathVariable Long accountid){
+        Page<Spoon> spoons    =   service.getAccountSpoons(accountid);
+
+
+        return new ResponseEntity<>(spoons.getContent(), HttpStatus.OK);
     }
 
     @RequestMapping(value="/spoon/{id}/", method = RequestMethod.DELETE)

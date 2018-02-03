@@ -29,6 +29,8 @@ public class Bowl {
 
     private String contents;
 
+    private String imgPath;
+
     private String imgthumbnail;
 
     @Temporal(TemporalType.TIMESTAMP)

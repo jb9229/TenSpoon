@@ -66,8 +66,8 @@ public class AccountControllerTest {
 
     public static AccountDto.Create accountCreateFixture(){
         AccountDto.Create createDto =   new AccountDto.Create();
-        createDto.setUsername("Jinbeom");
-        createDto.setEmail("jb9229@gmail.com");
+        createDto.setUsername("JinbeomTest");
+        createDto.setEmail("jinbeomjeongTest@gmail.com");
         createDto.setPassword("123456");
         createDto.setFemale(false);
         createDto.setSingle(true);
@@ -80,8 +80,8 @@ public class AccountControllerTest {
 
     public static AccountDto.Create obdonationAccountCreateFixture(){
         AccountDto.Create createDto =   new AccountDto.Create();
-        createDto.setUsername("tenspoon");
-        createDto.setEmail("obdonation@gmail.com");
+        createDto.setUsername("tenspoonTest");
+        createDto.setEmail("obdonationTest@gmail.com");
         createDto.setPassword("123456");
         createDto.setFemale(false);
         createDto.setSingle(true);

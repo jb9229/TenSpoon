@@ -114,7 +114,7 @@ public class AccountController {
 
         Page<Account> page              = null;
 
-         List<AccountDto.Response> content = page.getContent().parallelStream()
+        List<AccountDto.Response> content = page.getContent().parallelStream()
                 .map(newAccount -> modelMapper.map(newAccount, AccountDto.Response.class))
                 .collect(Collectors.toList());
 

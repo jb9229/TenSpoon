@@ -5,12 +5,14 @@ import com.hoh.Application;
 import com.hoh.accounts.Account;
 import com.hoh.accounts.AccountDto;
 import com.hoh.accounts.AccountService;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.web.FilterChainProxy;
@@ -40,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Created by jeong on 2016-03-01.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @WebAppConfiguration
 public class BowlControllerTest {
 
@@ -65,19 +67,34 @@ public class BowlControllerTest {
     private ModelMapper modelMapper;
 
 
+    Account account     =   null;
+    Bowl bowl           =   null;
 
     @Before
     public void setUp() throws Exception {
+        account       =   null;
+        bowl          =   null;
+
         mockMvc = MockMvcBuilders.webAppContextSetup(wac)
                 .addFilter(filterChainProxy)
                 .build();
     }
 
+    @After
+    public void setDown() throws Exception {
+        if(account != null)
+            accountService.deleteAccount(account.getId());
+
+        if(bowl != null)
+            service.deleteBowl(bowl.getId());
+
+    }
+
 
     public static AccountDto.Create accountCreateFixture(){
         AccountDto.Create createDto =   new AccountDto.Create();
-        createDto.setUsername("Jinbeom");
-        createDto.setEmail("jinbeomjeong@google.com");
+        createDto.setUsername("JinbeomTest");
+        createDto.setEmail("jinbeomjeongTest@google.com");
         createDto.setPassword("123456");
         createDto.setFemale(false);
         createDto.setSingle(true);
@@ -109,8 +126,8 @@ public class BowlControllerTest {
 
     @Test
     public void testCreateBowl() throws Exception {
-        AccountDto.Create create        =   accountCreateFixture();
-        Account account                 =   accountService.createAccount(create);
+        AccountDto.Create create    =   accountCreateFixture();
+        account                     =   accountService.createAccount(create);
 
         BowlDto.Create createBowl          =   bowlCreateFixture();
 
@@ -126,11 +143,11 @@ public class BowlControllerTest {
 
     @Test
      public void testGetBowl() throws Exception {
-        AccountDto.Create create        =   accountCreateFixture();
-        Account account                 =   accountService.createAccount(create);
+        AccountDto.Create create    =   accountCreateFixture();
+        account                     =   accountService.createAccount(create);
 
         BowlDto.Create createBowl       =   bowlCreateFixture();
-        Bowl bowl                       =   service.createBowl(createBowl);
+        bowl                            =   service.createBowl(createBowl);
 
 
         ResultActions result = mockMvc.perform(get("/api/v1/bowls/" + bowl.getId())
@@ -142,11 +159,11 @@ public class BowlControllerTest {
 
     @Test
     public void testUploadImage() throws Exception {
-        AccountDto.Create create        =   accountCreateFixture();
-        Account account                 =   accountService.createAccount(create);
+        AccountDto.Create create    =   accountCreateFixture();
+        account                     =   accountService.createAccount(create);
 
         BowlDto.Create createBowl       =   bowlCreateFixture();
-        Bowl bowl                       =   service.createBowl(createBowl);
+        bowl                            =   service.createBowl(createBowl);
 
         File ufile   =   new File("C:\\notitle.PNG");
 
@@ -165,11 +182,11 @@ public class BowlControllerTest {
 
     @Test
     public void testGetBowls() throws Exception {
-        AccountDto.Create create        =   accountCreateFixture();
-        Account account                 =   accountService.createAccount(create);
+        AccountDto.Create create     =   accountCreateFixture();
+        account                      =   accountService.createAccount(create);
 
-        BowlDto.Create createBowl       =   bowlCreateFixture();
-        Bowl bowl                       =   service.createBowl(createBowl);
+        BowlDto.Create createBowl   =   bowlCreateFixture();
+        bowl                        =   service.createBowl(createBowl);
 
 
         ResultActions result = mockMvc.perform(get("/api/v1/bowls/")
@@ -188,7 +205,7 @@ public class BowlControllerTest {
         Account account                 =   accountService.createAccount(create);
 
         BowlDto.Create createBowl       =   bowlCreateFixture();
-        Bowl bowl                       =   service.createBowl(createBowl);
+        bowl                            =   service.createBowl(createBowl);
 
 
         BowlDto.Update  updateDto       =   modelMapper.map(createBowl, BowlDto.Update.class);
@@ -212,7 +229,7 @@ public class BowlControllerTest {
         BowlDto.Create createBowl          =   bowlCreateFixture();
 
         Account account                 =   accountService.createAccount(create);
-        Bowl bowl                       =   service.createBowl(createBowl);
+        bowl                            =   service.createBowl(createBowl);
 
 
         ResultActions result = mockMvc.perform(delete("/api/v1/bowls/" + bowl.getId())
