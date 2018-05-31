@@ -1,6 +1,8 @@
 package com.hoh.accounts;
 
 import java.util.Date;
+
+import com.hoh.AdTS.AdTSRepository;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +17,13 @@ public class AccountService {
 
     private static final Logger log = LoggerFactory.getLogger(AccountService.class);
 
+    public static final int ORDERNUMBER_ADTS_RETURN  =   1;
+
     @Autowired
     private AccountRepository repository;
+
+    @Autowired
+    private AdTSRepository adTSRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -27,7 +34,7 @@ public class AccountService {
 
     public Account createAccount(AccountDto.Create dto)
     {
-        Account account = (Account)this.modelMapper.map(dto, Account.class);
+        Account account = this.modelMapper.map(dto, Account.class);
 
         String username = dto.getUsername();
         if (this.repository.findByUsername(username) != null) {
@@ -39,7 +46,7 @@ public class AccountService {
         account.setJoined(date);
         account.setUpdated(date);
 
-        return (Account)this.repository.save(account);
+        return this.repository.save(account);
     }
 
     public Account getAccount(Long id)
@@ -127,5 +134,28 @@ public class AccountService {
             sb.append(charSet[index]);
         }
         return sb.toString();
+    }
+
+
+    //AdTS Methods
+    public Integer getOrderNumAdTS(Long accountID) {
+        return repository.getOrderNumAdTS(accountID);
+    }
+
+    public void updateNextOrderNumAdTS(Long accountID, int currOrderNum) {
+        Integer maxAdTSOrderNum  =   adTSRepository.getMaxAdTSOrderNum();
+
+        int nextOrderNum;
+        if(maxAdTSOrderNum == null){maxAdTSOrderNum    =   0;}
+
+        if(currOrderNum > maxAdTSOrderNum)
+        {
+            //Return OrderNum   -> 1
+            nextOrderNum    =   ORDERNUMBER_ADTS_RETURN;
+        }else{
+            nextOrderNum    =   currOrderNum + 1;
+        }
+
+        repository.setNextOrderNumAdTS(accountID, nextOrderNum);
     }
 }

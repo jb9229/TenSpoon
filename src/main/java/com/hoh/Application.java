@@ -4,8 +4,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.web.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,17 +16,17 @@ import java.util.Properties;
  * Created by test on 2015-10-29.
  */
 @SpringBootApplication
-public class Application extends SpringBootServletInitializer{
+public class Application {
 
     public static final String FILESERVER                   =   "D:/1_work/fileserver/";
     public static final String FILESERVER_IMG               =   "D:/1_work/fileserver/img"; //String webappRoot = servletContext.getRealPath("/");
     public static final String FILESERVER_IMG_PROFILE       =   "D:/1_work/fileserver/img/profile";
     public static final String FILESERVER_IMG_THUMBNAILS    =   "D:/1_work/fileserver/img/thumbnails/";
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application){
-        return application.sources(Application.class);
-    }
+//    @Override
+//    protected SpringApplicationBuilder configure(SpringApplicationBuilder application){
+//        return application.sources(Application.class);
+//    }
 
 
     public static void main(String[] args) {

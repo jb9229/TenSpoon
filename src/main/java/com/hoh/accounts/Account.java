@@ -1,5 +1,6 @@
 package com.hoh.accounts;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,8 +13,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Getter
-@Setter
+@Data
 public class Account  {
     @Id
     @GeneratedValue
@@ -30,6 +30,7 @@ public class Account  {
     private int birth;
     private String residence;
     private Double authMailkey;
+    private int adtsOrderNum    =   1;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date joined;

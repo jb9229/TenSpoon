@@ -4,16 +4,17 @@ public class AccountNotFoundException extends RuntimeException {
     Long id;
     String email;
 
-    public AccountNotFoundException(Long id)
-    {
-        this.id = id;
-    }
+
+    //Constuctor
+    public AccountNotFoundException(Long id){this.id = id;}
 
     public AccountNotFoundException(String email)
     {
         this.email = email;
     }
 
+
+    //Method
     public Long getId()
     {
         return this.id;

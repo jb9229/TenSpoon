@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Created by jeong on 2015-10-20.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest
 @WebAppConfiguration
 public class AccountControllerTest {
 
@@ -65,28 +65,26 @@ public class AccountControllerTest {
 
 
     public static AccountDto.Create accountCreateFixture(){
-        AccountDto.Create createDto =   new AccountDto.Create();
-        createDto.setUsername("JinbeomTest");
-        createDto.setEmail("jinbeomjeongTest@gmail.com");
-        createDto.setPassword("123456");
-        createDto.setFemale(false);
-        createDto.setSingle(true);
-        createDto.setBirth(1983);
-        createDto.setResidence("충청북도 영동군");
+        AccountDto.Create createDto = createAccountDto("JinbeomTest", "jinbeomjeongTest@gmail.com");
 
 
         return createDto;
     }
 
-    public static AccountDto.Create obdonationAccountCreateFixture(){
-        AccountDto.Create createDto =   new AccountDto.Create();
-        createDto.setUsername("tenspoonTest");
-        createDto.setEmail("obdonationTest@gmail.com");
+    private static AccountDto.Create createAccountDto(String userName, String email) {
+        AccountDto.Create createDto = new AccountDto.Create();
+        createDto.setUsername(userName);
+        createDto.setEmail(email);
         createDto.setPassword("123456");
         createDto.setFemale(false);
         createDto.setSingle(true);
         createDto.setBirth(1983);
         createDto.setResidence("충청북도 영동군");
+        return createDto;
+    }
+
+    public static AccountDto.Create obdonationAccountCreateFixture(){
+        AccountDto.Create createDto = createAccountDto("tenspoonTest", "obdonationTest@gmail.com");
 
 
         return createDto;

@@ -28,7 +28,7 @@ public class SecurityResourceServer extends ResourceServerConfigurerAdapter {
                 .antMatchers("/api/v1/**").hasRole("USER")
                 .antMatchers("/api/**").hasRole("USER")
                 .antMatchers("/api/vi/*").hasRole("USER")
-                .anyRequest().authenticated();
+                .anyRequest().permitAll();
 //                .and()
 //                .requiresChannel()        //https
 //                .anyRequest().requiresSecure();

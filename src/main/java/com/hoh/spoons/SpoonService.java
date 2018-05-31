@@ -42,11 +42,11 @@ public class SpoonService {
 
 
 
-        int donationRice                    =   accountService.addRice(account, riceUpdate, rice);
+//        int donationRice                    =   accountService.addRice(account, riceUpdate, rice);
 
 
 
-        if(donationRice > 0)
+        if(rice > 0)
         {
             Page<Spoon> page                =   getAccountSpoons(account.getId());
 

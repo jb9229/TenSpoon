@@ -1,9 +1,11 @@
 package com.hoh;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.resource.PathResourceResolver;
 
 /**
  * Created by jeong on 2016-03-16.
@@ -14,16 +16,21 @@ public class TSWebMvcConfiguration extends WebMvcConfigurerAdapter {
     public static final String FILESYSTEM_IMG_PATH          =   FILESYSTEM_PATH+"img/";
     public static final String FILESYSTEM_THUMBNAILS_PATH   =   FILESYSTEM_IMG_PATH+"thumbnails/";
 
-    private Environment environment;
+    @Value("${static.resource.location}")
+    private String staticResourceLocation;
 
 
+//    @Override
+//    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+////        registry.addResourceHandler(FILESYSTEM_PATH+"**")
+////                .addResourceLocations(Application.FILESERVER)
+////                .setCachePeriod(3600)
+////                .resourceChain(true)
+////                .addResolver(new PathResourceResolver());
+//
+//        super.addResourceHandlers(registry);
+//    }
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/resources/**")
-                .addResourceLocations("/resources/");
-
-
-        registry.addResourceHandler(FILESYSTEM_PATH+"**")
-                .addResourceLocations(Application.FILESERVER);
-    }
+        registry.addResourceHandler("/assets/**").addResourceLocations(staticResourceLocation); }
 }

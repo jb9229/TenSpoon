@@ -34,7 +34,8 @@ public class BowlService {
 
         if(!bowl.isFull())
         {
-            bowl.setRiceTol(rice);
+            int currRiceTot =   bowl.getRiceTol();
+            bowl.setRiceTol(currRiceTot+rice);
 
             repository.save(bowl);
 

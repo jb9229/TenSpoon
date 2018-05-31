@@ -45,6 +45,6 @@ public class Bowl {
 
 
     public boolean isFull(){
-        return riceAim >= riceTol;
+        return riceAim <= riceTol;
     }
 }

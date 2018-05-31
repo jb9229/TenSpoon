@@ -244,8 +244,9 @@ public class AccountController {
     }
 
 
-    @ExceptionHandler(UserDuplicatedException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+
+    //Exception Handler Method
+    @ExceptionHandler(UserDuplicatedException.class)@ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handlerUserDuplicatedException(UserDuplicatedException e){
         ErrorResponse   errorResponse   =   new ErrorResponse();
         errorResponse.setMessage("["+ e.getUsername() + "] 중복된 username 입니다.");
